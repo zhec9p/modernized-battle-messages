@@ -1,23 +1,5 @@
 module Battle
   class Move
-    module ZVBattleMsgMove
-      # Show the critical hit message
-      # @param actual_targets [Array<PFM::PokemonBattler>]
-      # @param target [PFM::PokemonBattler]
-      def hit_criticality_message(actual_targets, target)
-        return if Configs.zv_battle_msg.replace_critical_hit
-        return unless critical_hit?
-
-        message = actual_targets.size == 1 ? parse_text(18, 84) : parse_text_with_pokemon(19, 384, target)
-        scene.display_message_and_wait(message)
-      end
-
-      def efficent_message(effectiveness, target)
-        return super unless Configs.zv_battle_msg.replace_effectiveness
-      end
-    end
-    prepend ZVBattleMsgMove
-
     class Basic
       module ZVBattleMsgBasic
         private
@@ -31,7 +13,7 @@ module Battle
             hp = damages(user, target)
             damage_handler = @logic.damage_handler
             damage_handler.damage_change_with_process(hp, target, user, self) do
-              hit_criticality_message(actual_targets, target)
+              zv_hit_criticality_message(actual_targets, target)
               efficent_message(effectiveness, target) if hp > 0
             end
             recoil(hp, user) if recoil? && damage_handler.instance_variable_get(:@reason).nil?
@@ -67,7 +49,7 @@ module Battle
             actual_targets.each do |target|
               hp = damages(user, target)
               @logic.damage_handler.damage_change_with_process(hp, target, user, self) do
-                hit_criticality_message(actual_targets, target)
+                zv_hit_criticality_message(actual_targets, target)
                 efficent_message(effectiveness, target) if hp > 0 && i == @hit_amount - 1
               end
               recoil(hp, user) if recoil?
@@ -104,7 +86,7 @@ module Battle
             actual_targets.each do |target|
               hp = damages(user, target)
               @logic.damage_handler.damage_change_with_process(hp, target, user, self) do
-                hit_criticality_message(actual_targets, target)
+                zv_hit_criticality_message(actual_targets, target)
                 efficent_message(effectiveness, target) if hp > 0 && i == @hit_amount - 1
               end
               recoil(hp, user) if recoil?
@@ -134,7 +116,7 @@ module Battle
           actual_targets.each do |target|
             hp = damages(user, target)
             @logic.damage_handler.drain_with_process(hp, target, user, self, hp_overwrite: hp, drain_factor: drain_factor) do
-              hit_criticality_message(actual_targets, target)
+              zv_hit_criticality_message(actual_targets, target)
               efficent_message(effectiveness, target) if hp > 0
             end
             recoil(hp, user) if recoil?
@@ -155,7 +137,7 @@ module Battle
 
           hp = damages(user, target)
           @logic.damage_handler.damage_change_with_process(hp, target, user, self) do
-            hit_criticality_message(actual_targets, target)
+            zv_hit_criticality_message(actual_targets, target)
             efficent_message(effectiveness, target) if hp > 0 && target == actual_targets.last
           end
           recoil(hp, user) if recoil?
@@ -194,7 +176,7 @@ module Battle
             play_animation(user, [target]) if @nb_hit > 1
             hp = damages(user, target)
             @logic.damage_handler.damage_change_with_process(hp, target, user, self) do
-              hit_criticality_message(actual_targets, target)
+              zv_hit_criticality_message(actual_targets, target)
               efficent_message(effectiveness, target) if hp > 0 && @nb_hit == @hit_amount
             end
             recoil(hp, user) if recoil?
@@ -220,7 +202,7 @@ module Battle
 
             hp = damages(user, target)
             @logic.damage_handler.damage_change_with_process(hp, target, user, self) do
-              hit_criticality_message(actual_targets, target)
+              zv_hit_criticality_message(actual_targets, target)
               efficent_message(effectiveness, target) if hp > 0
             end
             recoil(hp, user) if recoil?
@@ -245,7 +227,7 @@ module Battle
           actual_targets.each do |target|
             @hp = damages(user, target)
             @logic.damage_handler.damage_change_with_process(@hp, target, user, self) do
-              hit_criticality_message(actual_targets, target)
+              zv_hit_criticality_message(actual_targets, target)
               efficent_message(effectiveness, target) if @hp > 0
             end
             recoil(@hp, user) if recoil?
