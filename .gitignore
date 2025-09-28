@@ -11,9 +11,15 @@ audio/se/*
 
 !Data
 Data/*
-!Data/configs/
+!Data/configs
 Data/configs/*
 !Data/configs/plugins
+
+!Data/Text
+Data/Text/*
+!Data/Text/Dialogs
+Data/Text/Dialogs/*
+!Data/Text/Dialogs/193208.csv
 
 !graphics
 graphics/*
@@ -24,4 +30,3 @@ graphics/animations/*
 !scripts
 scripts/*
 !scripts/ZVBattleMessages
-!scripts/ZVBattleMessages.psdkplug

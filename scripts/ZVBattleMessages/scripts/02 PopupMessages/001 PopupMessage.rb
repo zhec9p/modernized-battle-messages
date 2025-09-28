@@ -32,7 +32,8 @@ module ZVBattleMsg
 
     # Sprite for the popup message
     def create_sprite
-      sprite = @sprite_stack.add_sprite(0, 0, popup_filename)
+      filename = ZVBattleMsg.translate_animation_filename(popup_filename)
+      sprite = @sprite_stack.add_sprite(0, 0, filename)
       sprite.set_origin(sprite.width / 2, sprite.height)
     end
 
