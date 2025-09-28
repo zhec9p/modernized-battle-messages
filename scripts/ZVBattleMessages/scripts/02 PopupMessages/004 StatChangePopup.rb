@@ -1,5 +1,8 @@
 module ZVBattleMsg
   class StatChangePopup < PopupMessage
+    CSV_ID   = ZVBattleMsg::Constants::CSV_ID
+    TEXT_IDS = { atk: 0, dfe: 1, spd: 2, ats: 3, dfs: 4, acc: 5, eva: 6 }
+
     # @param viewport [Viewport]
     # @param scene [Battle::Scene]
     # @param target_sprite [BattleUI::PokemonSprite]
@@ -35,7 +38,7 @@ module ZVBattleMsg
     def create_text
       stage_text = @stages.to_s
       stage_text.prepend('+') if stat_up?
-      message = "#{@stat.to_s.upcase} #{stage_text}"
+      message = "#{stat_name} #{stage_text}"
       align_center = 1
       white = 9
 
@@ -48,6 +51,12 @@ module ZVBattleMsg
     # @return [String]
     def popup_filename
       return File.join(Constants::DIR_NAME, DIR_NAME, 'stat-change')
+    end
+
+    # 3-letter name of the stat
+    # @return [String]
+    def stat_name
+      return parse_text(CSV_ID, TEXT_IDS[@stat])
     end
 
     # @return [Boolean]
