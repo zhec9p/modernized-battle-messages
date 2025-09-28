@@ -1,6 +1,9 @@
 module Configs
   module Project
     class ZVBattleMsg
+      # ID of this plugin's CSV file.
+      attr_accessor :csv_id
+
       # Replaces the message displayed for super-effective and not-very-effective hits with a popup animation
       # @return [Boolean]
       attr_accessor :replace_effectiveness
