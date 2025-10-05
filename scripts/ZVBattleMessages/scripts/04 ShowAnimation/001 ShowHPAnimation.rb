@@ -53,7 +53,7 @@ module Battle
 
     module ZVBattleMsgShowHP
       def show_hp_animations(targets, hps, effectiveness = [],
-                             critical: $game_temp.zv_battle_msg_internal.critical_hits.last || [],
+                             critical: @scene.logic.zv_battle_msg_internal.critical_hits.last || [],
                              &messages)
         return super(targets, hps, effectiveness, &messages) unless
           Configs.zv_battle_msg.replace_effectiveness ||
