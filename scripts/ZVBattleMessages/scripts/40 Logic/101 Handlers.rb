@@ -17,24 +17,24 @@ module Battle
       module ZVBattleMsgDamageHandler
         def damage_change(*args, **kwargs, &block)
           skill = args[3]
-          $game_temp.zv_battle_msg_internal.critical_hits << [skill&.critical_hit?]
+          @logic.zv_battle_msg_internal.critical_hits << [skill&.critical_hit?]
           ret = super
-          $game_temp.zv_battle_msg_internal.critical_hits.pop
+          @logic.zv_battle_msg_internal.critical_hits.pop
           return ret
         end
 
         def drain(*args, **kwargs, &block)
           skill = args[3]
-          $game_temp.zv_battle_msg_internal.critical_hits << [skill&.critical_hit?]
+          @logic.zv_battle_msg_internal.critical_hits << [skill&.critical_hit?]
           ret = super
-          $game_temp.zv_battle_msg_internal.critical_hits.pop
+          @logic.zv_battle_msg_internal.critical_hits.pop
           return ret
         end
 
         def heal_change(...)
-          $game_temp.zv_battle_msg_internal.critical_hits << []
+          @logic.zv_battle_msg_internal.critical_hits << []
           ret = super
-          $game_temp.zv_battle_msg_internal.critical_hits.pop
+          @logic.zv_battle_msg_internal.critical_hits.pop
           return ret
         end
       end
