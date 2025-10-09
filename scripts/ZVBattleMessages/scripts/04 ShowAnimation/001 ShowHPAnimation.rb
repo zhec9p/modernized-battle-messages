@@ -3,11 +3,11 @@ module Battle
     # Create a popup message about the effectiveness of a hit
     # @param target_sprite [BattleUI::PokemonSprite]
     # @poram effectiveness [Integer, nil]
-    # @return [ZVBattleMsg::PopupMessage, nil]
+    # @return [ZVBattleUI::PopupMessage, nil]
     def zv_hit_effectiveness_popup(target_sprite, effectiveness)
       return nil unless effectiveness
-      return ZVBattleMsg::SuperEffectivePopup.new(viewport, @scene, target_sprite) if effectiveness > 1
-      return ZVBattleMsg::NotVeryEffectivePopup.new(viewport, @scene, target_sprite) if effectiveness > 0 && effectiveness < 1
+      return ZVBattleUI::SuperEffectivePopup.new(viewport, @scene, target_sprite) if effectiveness > 1
+      return ZVBattleUI::NotVeryEffectivePopup.new(viewport, @scene, target_sprite) if effectiveness > 0 && effectiveness < 1
 
       return nil
     end
@@ -15,18 +15,18 @@ module Battle
     # Create a popup message about whether the hit is critical
     # @param target_sprite [BattleUI::PokemonSprite]
     # @poram critical [Boolean, nil]
-    # @return [ZVBattleMsg::PopupMessage, nil]
+    # @return [ZVBattleUI::PopupMessage, nil]
     def zv_critical_hit_popup(target_sprite, critical)
       return nil unless critical
 
-      return ZVBattleMsg::CriticalHitPopup.new(viewport, @scene, target_sprite)
+      return ZVBattleUI::CriticalHitPopup.new(viewport, @scene, target_sprite)
     end
 
     # Create relevant popup messages on a hit
     # @param targets [Array<PFM::PokemonBattler>]
     # @param effectiveness [Array<Integer>]
     # @param critical [Array<Boolean>]
-    # @return [Array<ZVBattleMsg::PopupMessage>]
+    # @return [Array<ZVBattleUI::PopupMessage>]
     def zv_create_hit_popup_animations(targets, effectiveness, critical)
       ya = Yuki::Animation
       popups = Hash.new { |h, k| h[k] = [] }

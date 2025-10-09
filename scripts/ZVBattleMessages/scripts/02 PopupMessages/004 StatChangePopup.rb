@@ -1,4 +1,4 @@
-module ZVBattleMsg
+module ZVBattleUI
   class StatChangePopup < PopupMessage
     TEXT_IDS = { atk: 0, dfe: 1, spd: 2, ats: 3, dfs: 4, acc: 5, eva: 6 }
 

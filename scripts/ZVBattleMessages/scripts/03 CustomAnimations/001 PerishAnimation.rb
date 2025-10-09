@@ -1,4 +1,4 @@
-module ZVBattleMsg
+module ZVBattleUI
   # Handle the perish count animation in the battle scene
   class PerishAnimation
     DIR_NAME = 'perish'

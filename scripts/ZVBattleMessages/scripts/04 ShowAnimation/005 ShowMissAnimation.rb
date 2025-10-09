@@ -1,15 +1,14 @@
 module Battle
   class Visual
-    # Show an animation for a battler's perish count
+    # Show an animation for a battler avoiding an attack
     # @param target [PFM::PokemonBattler]
     # @param countdown [Integer] Perish count
-    def zv_show_perish_animation(target, countdown)
+    def zv_show_miss_animation(target)
       ya = Yuki::Animation
       target_sprite = battler_sprite(target.bank, target.position)
-      perish = ZVBattleUI::PerishAnimation.new(viewport, @scene, target_sprite, countdown)
-
-      anim = perish.create_animation
-      anim.play_before(ya.send_command_to(perish, :dispose))
+      popup = ZVBattleUI::MissPopup.new(viewport, @scene, target_sprite)
+      anim = popup.create_animation
+      anim.play_before(ya.send_command_to(popup, :dispose))
       @animations << anim
       anim.start
       wait_for_animation

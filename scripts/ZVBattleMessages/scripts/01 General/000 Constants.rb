@@ -1,4 +1,4 @@
-module ZVBattleMsg
+module ZVBattleUI
   module Constants
     DIR_NAME = 'zv-battle-messages'
   end

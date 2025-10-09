@@ -1,7 +1,8 @@
 module Configs
   module Project
     class ZVBattleMsg
-      # ID of this plugin's CSV file.
+      # ID of this plugin's CSV file
+      # @return [Integer]
       attr_accessor :csv_id
 
       # Replaces the message displayed for super-effective and not-very-effective hits with a popup animation
@@ -20,7 +21,12 @@ module Configs
       # @return [Boolean]
       attr_accessor :replace_stat_change
 
+      # Replaces the message displayed when an attack misses
+      # @return [Boolean]
+      attr_accessor :replace_miss
+
       # Replaces the message displayed for perish counts with a custom animation
+      # @return [Boolean]
       attr_accessor :replace_perish
     end
   end
