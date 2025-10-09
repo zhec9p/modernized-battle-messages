@@ -5,11 +5,5 @@ module Battle
         nil
       end
     end
-
-    unless method_defined?(:zv_log_battle_stat_change)
-      def zv_log_battle_stat_change(...)
-        nil
-      end
-    end
   end
 end
