@@ -3,7 +3,7 @@ module Battle
     module ZVBattleMsgShowHP
       def zv_configure_hp_animation_handler(...)
         super
-        @show_hp_animators.add(ZVBattleUI::PopupHitHPAnimator.new(@scene))
+        @zv_hp_animators.add(ZVBattleUI::PopupsOnHitAnimator.new(@scene))
       end
 
       def show_hp_animations(*args, **kwargs, &block)

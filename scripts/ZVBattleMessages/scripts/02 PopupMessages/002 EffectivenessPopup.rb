@@ -23,11 +23,6 @@ module ZVBattleUI
 
   # Popup message when a move doesn't affect the target
   class UnaffectedPopup < PopupMessage
-    FADE_IN_DURATION = 0.125
-    FADE_OUT_DURATION = 0.125
-    IDLE_DURATION = 0.4
-    BATTLER_OPACITY_FACTOR = 0.7
-
     # @return [Yuki::Animation::TimedAnimation]
     # @note This animation doesn't dispose
     def create_animation
@@ -36,18 +31,18 @@ module ZVBattleUI
       x = @target_sprite.x + x_offset
       y = @target_sprite.y + y_offset
       battler_opacity1 = @target_sprite.opacity
-      battler_opacity2 = (BATTLER_OPACITY_FACTOR * battler_opacity1).round
+      battler_opacity2 = (battler_opacity_factor * battler_opacity1).round
 
-      fade_in  = ->(sp, opa1 = 0, opa2 = 255) { ya.opacity_change(FADE_IN_DURATION, sp, opa1, opa2) }
-      fade_out = ->(sp, opa1 = 255, opa2 = 0) { ya.opacity_change(FADE_OUT_DURATION, sp, opa1, opa2) }
-      idle     = -> { ya.wait(IDLE_DURATION) }
+      fade_in  = ->(sp, opa1 = 0, opa2 = 255) { ya.opacity_change(fade_in_duration, sp, opa1, opa2) }
+      fade_out = ->(sp, opa1 = 255, opa2 = 0) { ya.opacity_change(fade_out_duration, sp, opa1, opa2) }
+      stay     = -> { ya.wait(fade_stay_duration) }
 
       popup_anim = ya.move_discreet(0, @sprite_stack, x, y, x, y)
       popup_anim.play_before(fade_in.call(@sprite_stack))
-                .play_before(idle.call)
+                .play_before(stay.call)
                 .play_before(fade_out.call(@sprite_stack))
                 .play_before(fade_in.call(@sprite_stack))
-                .play_before(idle.call)
+                .play_before(stay.call)
 
       anim = fade_in.call(@target_sprite, battler_opacity1, battler_opacity2)
       anim.parallel_add(popup_anim)
@@ -64,5 +59,10 @@ module ZVBattleUI
     def popup_filename
       return File.join(Constants::DIR_NAME, DIR_NAME, 'no-effect')
     end
+
+    def fade_in_duration = 0.125
+    def fade_out_duration = 0.125
+    def fade_stay_duration = 0.4
+    def battler_opacity_factor = 0.75
   end
 end

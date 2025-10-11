@@ -1,11 +1,6 @@
 module ZVBattleUI
   # Popup message when a move doesn't affect the target
   class MissPopup < PopupMessagePreset
-    DODGE_RADIUS  = 25
-    OUT_DURATION  = 0.05
-    WAIT_DURATION = 0.45
-    IN_DURATION   = 0.2
-
     # @return [Yuki::Animation::TimedAnimation]
     # @note This animation doesn't dispose
     def create_animation
@@ -34,9 +29,9 @@ module ZVBattleUI
       tx = @target_sprite.x
       ty = @target_sprite.y
       dodge_x, dodge_y = dodge_distances
-      anim = ya.move_discreet(OUT_DURATION, @target_sprite, tx, ty, tx - dodge_x, ty + dodge_y)
-      anim.play_before(ya.wait(WAIT_DURATION))
-      anim.play_before(ya.move_discreet(IN_DURATION, @target_sprite, tx - dodge_x, ty + dodge_y, tx, ty))
+      anim = ya.move_discreet(dodge_outward_duration, @target_sprite, tx, ty, tx - dodge_x, ty + dodge_y)
+      anim.play_before(ya.wait(dodge_wait_duration))
+      anim.play_before(ya.move_discreet(dodge_inward_duration, @target_sprite, tx - dodge_x, ty + dodge_y, tx, ty))
       return anim
     end
 
@@ -47,18 +42,23 @@ module ZVBattleUI
       tx = @target_sprite.x
       ty = @target_sprite.y
       dodge_x, dodge_y = dodge_distances
-      anim = ya.move_discreet(OUT_DURATION, @target_sprite, tx, ty, tx + dodge_x, ty - dodge_y)
-      anim.play_before(ya.wait(WAIT_DURATION))
-      anim.play_before(ya.move_discreet(IN_DURATION, @target_sprite, tx + dodge_x, ty - dodge_y, tx, ty))
+      anim = ya.move_discreet(dodge_outward_duration, @target_sprite, tx, ty, tx + dodge_x, ty - dodge_y)
+      anim.play_before(ya.wait(dodge_wait_duration))
+      anim.play_before(ya.move_discreet(dodge_inward_duration, @target_sprite, tx + dodge_x, ty - dodge_y, tx, ty))
       return anim
     end
 
     # @return [Array<Integer, Integer>]
     def dodge_distances
       angle = Math.atan(Graphics.height.to_f / Graphics.width)
-      x = (Math.cos(angle) * DODGE_RADIUS).round
-      y = (Math.sin(angle) * DODGE_RADIUS).round
-      return x, y
+      x = (Math.cos(angle) * dodge_radius).round
+      y = (Math.sin(angle) * dodge_radius).round
+      return [x, y]
     end
+
+    def dodge_radius = 25
+    def dodge_outward_duration = 0.05
+    def dodge_wait_duration = 0.4
+    def dodge_inward_duration = 0.2
   end
 end

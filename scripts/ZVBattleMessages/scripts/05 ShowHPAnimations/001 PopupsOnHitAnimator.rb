@@ -1,40 +1,54 @@
 module ZVBattleUI
   # Responsible for creating an animation for all popup messages regarding a hit when a battler's HP should change
-  class PopupHitHPAnimator < ShowHPAnimatorBase
+  class PopupsOnHitAnimator < HPAnimatorBase
     # param scene [Battle::Scene]
     def initialize(scene)
       super()
       @scene = scene
     end
 
+    # Name of the HP animation creator
+    # @return [Symbol]
+    def name
+      return :popups_on_hit
+    end
+
     # @param target [PFM::PokemonBattler]
     # @param hp [Integer]
     # @param effectiveness [Float, nil]
-    # @param **_kwargs [Hash]
+    # @param **others [Hash]
     # @return [Yuki::Animation::TimedAnimation, nil]
-    def create_animation(target, _hp, effectiveness, **others)
+    def create_animation(target, hp, effectiveness, **others)
       ya = Yuki::Animation
       full_anim = ya.wait(0)
-      target_sprite = @scene.visual.battler_sprite(target.bank, target.position)
+      popups = create_popups(target, hp, effectiveness, **others)
 
-      popups = [
-        critical_hit_popup(target_sprite, others[:critical]),
-        hit_effectiveness_popup(target_sprite, effectiveness)
-      ].compact
-
-      popups.each_with_index do |popup, index|
-        anim = ya.wait(0.5 * index)
-        anim.play_before(popup.create_animation)
-            .play_before(ya.send_command_to(popup, :dispose))
+      popups.each_with_index do |pu, index|
+        anim = ya.wait(time_between_popups * index)
+        anim.play_before(pu.create_animation)
+            .play_before(ya.send_command_to(pu, :dispose))
 
         full_anim.parallel_add(anim)
       end
 
-      full_anim.start
       return full_anim
     end
 
     private
+
+    # Create all relevant popup messages for the hit
+    # @param target [PFM::PokemonBattler]
+    # @param hp [Integer]
+    # @param effectiveness [Float, nil]
+    # @param **others [Hash]
+    # @return [Array<ZVBattleUI::PopupMessage>]
+    def create_popups(target, _hp, effectiveness, **others)
+      target_sprite = @scene.visual.battler_sprite(target.bank, target.position)
+      return [
+        critical_hit_popup(target_sprite, others[:critical]),
+        hit_effectiveness_popup(target_sprite, effectiveness)
+      ].compact
+    end
 
     # Create a popup message about the effectiveness of a hit
     # @param target_sprite [BattleUI::PokemonSprite]
@@ -59,6 +73,12 @@ module ZVBattleUI
 
       viewport = @scene.visual.viewport
       return CriticalHitPopup.new(viewport, @scene, target_sprite)
+    end
+
+    # Amount of time to wait between playing each popup message
+    # @return [Float]
+    def time_between_popups
+      return 0.5
     end
   end
 end

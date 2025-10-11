@@ -3,12 +3,12 @@ proc do
 
   check_class_names = proc do |scope, class_names|
     name_conflicts = class_names.find_all { |n| scope.const_defined?(n) }.map { |n| "#{scope}::#{n}" }
-    raise "Name conflict with this plugin's #{name_conflicts.join(', ')}" unless name_conflicts.empty?
+    raise "Name conflict with #{name_conflicts.join(', ')}" unless name_conflicts.empty?
   end
 
   check_method_names = proc do |klass, method_names|
     name_conflicts = method_names.find_all { |n| klass.method_defined?(n) }.map { |n| "#{klass}.#{n}" }
-    raise "Name conflict with this plugin's #{name_conflicts.join(', ')}" unless name_conflicts.empty?
+    raise "Name conflict with #{name_conflicts.join(', ')}" unless name_conflicts.empty?
   end
 
   if Object.const_defined?(:ZVBattleUI)
@@ -22,7 +22,7 @@ proc do
         StatChangePopup
         PerishAnimation
         BattleMsgTemp
-        PopupHitHPAnimator
+        PopupsOnHitAnimator
       ]
     )
   end
