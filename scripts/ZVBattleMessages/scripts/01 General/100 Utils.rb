@@ -1,4 +1,4 @@
-module ZVBattleUI
+module ZVBattleMsg
   def self.home_language
     return 'en'
   end

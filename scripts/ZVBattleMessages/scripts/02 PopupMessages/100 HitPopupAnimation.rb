@@ -1,4 +1,4 @@
-module ZVBattleUI
+module ZVBattleMsg
   # Responsible for creating an animation for all popup messages regarding a hit when a battler's HP should change
   class HitPopupAnimation
     # param scene [Battle::Scene]
@@ -34,7 +34,7 @@ module ZVBattleUI
     # @param hp [Integer]
     # @param effectiveness [Float, nil]
     # @param cfitical [Boolean, nil]
-    # @return [Array<ZVBattleUI::PopupMessage>]
+    # @return [Array<ZVBattleMsg::PopupMessage>]
     def create_popups(target, _hp, effectiveness:, critical:)
       target_sprite = @scene.visual.battler_sprite(target.bank, target.position)
       popups = [
@@ -48,7 +48,7 @@ module ZVBattleUI
     # Create a popup message about the effectiveness of a hit
     # @param target_sprite [BattleUI::PokemonSprite]
     # @poram effectiveness [Float, nil]
-    # @return [ZVBattleUI::PopupMessage, nil]
+    # @return [ZVBattleMsg::PopupMessage, nil]
     def hit_effectiveness_popup(target_sprite, effectiveness)
       return unless Configs.zv_battle_msg.replace_effectiveness && effectiveness
 
@@ -62,7 +62,7 @@ module ZVBattleUI
     # Create a popup message about whether the hit is critical
     # @param target_sprite [BattleUI::PokemonSprite]
     # @poram critical [Boolean, nil]
-    # @return [ZVBattleUI::PopupMessage, nil]
+    # @return [ZVBattleMsg::PopupMessage, nil]
     def critical_hit_popup(target_sprite, critical)
       return unless Configs.zv_battle_msg.replace_critical_hit && critical
 

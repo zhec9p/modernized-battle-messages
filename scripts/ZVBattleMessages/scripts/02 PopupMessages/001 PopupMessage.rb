@@ -1,4 +1,4 @@
-module ZVBattleUI
+module ZVBattleMsg
   # Base class for creating an animation that displays a short popup message on a battler.
   # Tested with 96px x 17px popup message images on 96px x 96px battler sprites in 2D battle mode.
   class PopupMessage
@@ -32,7 +32,7 @@ module ZVBattleUI
 
     # Sprite for the popup message
     def create_sprite
-      filename = ZVBattleUI.translate_animation_filename(popup_filename)
+      filename = ZVBattleMsg.translate_animation_filename(popup_filename)
       sprite = @sprite_stack.add_sprite(0, 0, filename)
       sprite.set_origin(sprite.width / 2, sprite.height)
     end

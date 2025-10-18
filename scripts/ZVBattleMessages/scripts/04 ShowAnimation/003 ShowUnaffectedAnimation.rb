@@ -5,7 +5,7 @@ module Battle
     def zv_show_unaffected_animation(target)
       ya = Yuki::Animation
       target_sprite = battler_sprite(target.bank, target.position)
-      animator = ZVBattleUI::UnaffectedPopup.new(viewport, @scene, target_sprite)
+      animator = ZVBattleMsg::UnaffectedPopup.new(viewport, @scene, target_sprite)
 
       anim = animator.create_animation
       anim.play_before(ya.send_command_to(animator, :dispose))

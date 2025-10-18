@@ -1,4 +1,4 @@
-module ZVBattleUI
+module ZVBattleMsg
   # Popup message when a super effective move hits
   class SuperEffectivePopup < PopupMessagePreset
     private

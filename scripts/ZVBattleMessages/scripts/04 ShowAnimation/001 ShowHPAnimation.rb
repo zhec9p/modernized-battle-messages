@@ -18,7 +18,7 @@ module Battle
 
             animations << Battle::Visual::FakeHPAnimation.new(@scene, target, effectiveness[index]) if hp == 0
             animations << Battle::Visual::HPAnimation.new(@scene, target, hp, effectiveness[index]) if hp != 0
-            animations << ZVBattleUI::HitPopupAnimation.new(@scene).create_animation(
+            animations << ZVBattleMsg::HitPopupAnimation.new(@scene).create_animation(
               target, hp,
               effectiveness: effectiveness[index],
               critical: critical[index]

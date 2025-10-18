@@ -10,13 +10,13 @@ module BattleUI
         unless target&.effects&.has?(&:out_of_reach?)
           sprite = UI::StatAnimation.new(viewport, amount, z, @bank)
           sprite_anim = ya.move(0, sprite, x, y, x + sprite.x_offset, y + sprite.y_offset)
-          sprite_duration = [0.1, ZVBattleUI::StatChangePopup.main_duration + 0.2].max
+          sprite_duration = [0.1, ZVBattleMsg::StatChangePopup.main_duration + 0.2].max
           sprite_anim.play_before(ya.scalar(sprite_duration, sprite, :animation_progression=, 0, 1))
                      .play_before(ya.send_command_to(sprite, :dispose))
           anim.parallel_add(sprite_anim)
         end
 
-        popup = ZVBattleUI::StatChangePopup.new(viewport, @scene, self, stat, amount)
+        popup = ZVBattleMsg::StatChangePopup.new(viewport, @scene, self, stat, amount)
         popup_anim = popup.create_animation
         popup_anim.play_before(ya.send_command_to(popup, :dispose))
         anim.parallel_add(popup_anim)

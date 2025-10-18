@@ -1,4 +1,4 @@
-module ZVBattleUI
+module ZVBattleMsg
   # Popup message when a move misses the target
   class MissPopup < PopupMessagePreset
     # @return [Yuki::Animation::TimedAnimation]

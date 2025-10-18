@@ -11,9 +11,9 @@ proc do
     raise "Name conflict with #{name_conflicts.join(', ')}" unless name_conflicts.empty?
   end
 
-  if Object.const_defined?(:ZVBattleUI)
+  if Object.const_defined?(:ZVBattleMsg)
     check_class_names.call(
-      ZVBattleUI, %i[
+      ZVBattleMsg, %i[
         PopupMessage
         PopupMessagePreset
         SuperEffectivePopup

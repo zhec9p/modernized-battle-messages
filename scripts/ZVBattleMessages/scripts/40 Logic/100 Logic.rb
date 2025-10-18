@@ -5,7 +5,7 @@ module Battle
 
       def initialize(...)
         super
-        @zv_battle_msg_internal = ZVBattleUI::BattleMsgTemp.new
+        @zv_battle_msg_internal = ZVBattleMsg::BattleMsgTemp.new
       end
     end
     prepend ZVBattleMsgLogic

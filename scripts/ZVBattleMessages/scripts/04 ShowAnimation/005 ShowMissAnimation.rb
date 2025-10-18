@@ -6,7 +6,7 @@ module Battle
     def zv_show_miss_animation(target)
       ya = Yuki::Animation
       target_sprite = battler_sprite(target.bank, target.position)
-      popup = ZVBattleUI::MissPopup.new(viewport, @scene, target_sprite)
+      popup = ZVBattleMsg::MissPopup.new(viewport, @scene, target_sprite)
       anim = popup.create_animation
       anim.play_before(ya.send_command_to(popup, :dispose))
       @animations << anim

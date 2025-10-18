@@ -1,4 +1,4 @@
-module ZVBattleUI
+module ZVBattleMsg
   class BattleMsgTemp
     # "Stack frame" for critical hit booleans for show_hp_animation.
     # This hacky approach avoids overriding chunks of code in damage_change, drain, and heal methods.

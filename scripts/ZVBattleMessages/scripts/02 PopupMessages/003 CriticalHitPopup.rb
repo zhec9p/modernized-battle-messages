@@ -1,4 +1,4 @@
-module ZVBattleUI
+module ZVBattleMsg
   class CriticalHitPopup < PopupMessagePreset
     private
 
