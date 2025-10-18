@@ -13,7 +13,7 @@ module Configs
       # @return [Boolean]
       attr_accessor :replace_critical_hit
 
-      # Replaces the message displayed when a move doesn't affect a battler with a popup and battler sprite animation
+      # Replaces the message displayed when a move doesn't affect a battler with a popup and battler animation
       # @return [Boolean]
       attr_accessor :replace_unaffected
 
@@ -22,7 +22,7 @@ module Configs
       # @return [Boolean]
       attr_accessor :replace_stat_change
 
-      # Replaces the message displayed when an attack misses with a popup and battler sprite animation
+      # Replaces the message displayed when an attack misses with a popup and battler animation
       # @return [Boolean]
       attr_accessor :replace_miss
 
