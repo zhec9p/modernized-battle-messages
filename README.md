@@ -3,7 +3,6 @@
 ## Table of Contents
 - [Overview](#overview)
 - [Installation](#installation)
-- [Uninstallation](#uninstallation)
 - [Known Limitations](#known-limitations)
 - [Dependencies](#dependencies)
 - [Credits](#credits)
@@ -26,6 +25,7 @@ The following replacements are available and can be enabled or disabled in `Data
 - `replace_perish`: Replaces the message displayed for a battler's perish count with a custom animation.
 
 ## Installation
+To install:
 1. Download `ZVBattleMessages.psdkplug` and `193208.csv` from the [newest release](https://github.com/zhec9p/modernized-battle-messages/releases/latest).
 2. Place the downloaded .psdkplug file in the `scripts` subdirectory of your project's root folder.
 3. Open the `cmd.bat` file located in your project's root folder. This will bring up a command prompt.
@@ -35,19 +35,16 @@ The following replacements are available and can be enabled or disabled in `Data
 > [!NOTE]
 > If you're already using the `193208.csv` filename for a different file, then you can rename this plugin's CSV file to a different `1NNNNN.csv` file. Change the number in the `csv_id` field in this plugin's JSON config file to the `NNNNN` number you picked.
 
-## Uninstallation
-1. Delete the following .psdkplug files from the `scripts` subdirectory of your project's root folder
-    - `ZVBattleMessages.psdkplug`
-    - `ZVShowHPAnimationsExtended.psdkplug` (if no other plugins or scripts depend on it)
+To uninstall:
+1. Delete `ZVBattleMessages.psdkplug` from the `scripts` subdirectory of your project's root folder
 2. Open the `cmd.bat` file located in your project's root folder. Enter in `psdk --util=plugin load`. Enter "Y" when asked whether to remove the files added by the plugin.
 3. Delete `193208.csv` or whatever you named that CSV file from `YOUR_PROJECT_ROOT/Data/Text/Dialogs`.
 
 ## Known Limitations
-The animations in this plugin are currently meant for 2D battle mode.
+3D battle camera is not supported.
 
 ## Dependencies
 - PSDK 26.47 or newer
-- The [Show HP Animations Extended](https://github.com/zhec9p/show-hp-animations-extended) plugin, which is automatically downloaded and installed by this plugin.
 
 ## Credits
 #### Plugin Creator
