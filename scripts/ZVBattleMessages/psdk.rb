@@ -17,12 +17,13 @@ proc do
         PopupMessage
         PopupMessagePreset
         SuperEffectivePopup
-        UnaffectedPopup
         CriticalHitPopup
+        UnaffectedPopup
+        MissPopup
         StatChangePopup
         PerishAnimation
         BattleMsgTemp
-        PopupsOnHitAnimator
+        HitPopupAnimation
       ]
     )
   end
