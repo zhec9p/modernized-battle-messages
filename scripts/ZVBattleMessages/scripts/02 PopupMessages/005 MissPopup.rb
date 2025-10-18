@@ -1,16 +1,16 @@
 module ZVBattleUI
-  # Popup message when a move doesn't affect the target
+  # Popup message when a move misses the target
   class MissPopup < PopupMessagePreset
     # @return [Yuki::Animation::TimedAnimation]
     # @note This animation doesn't dispose
     def create_animation
       ya = Yuki::Animation
       anim = super
-      dodge_anim = ya::UserBankRelativeAnimation.new
-      dodge_anim.resolver = { user: @target_sprite }.method(:[])
-      dodge_anim.play_before_on_bank(0, friend_animation)
-      dodge_anim.play_before_on_bank(1, foe_animation)
-      anim.parallel_add(dodge_anim)
+      miss_anim = ya::UserBankRelativeAnimation.new
+      miss_anim.resolver = { user: @target_sprite }.method(:[])
+      miss_anim.play_before_on_bank(0, friend_animation)
+      miss_anim.play_before_on_bank(1, foe_animation)
+      anim.parallel_add(miss_anim)
       return anim
     end
 
@@ -22,7 +22,7 @@ module ZVBattleUI
       return File.join(Constants::DIR_NAME, DIR_NAME, 'miss')
     end
 
-    # Animation of battler sprite at the player's bank in parallel of the popup message
+    # Animation of player/ally battler sprite in parallel of the popup message
     # @return [Yuki::Animation::TimedAnimation]
     def friend_animation
       ya = Yuki::Animation
@@ -35,7 +35,7 @@ module ZVBattleUI
       return anim
     end
 
-    # Animation of battler sprite at the enemy bank in parallel of the popup message
+    # Animation of enemy battler sprite in parallel of the popup message
     # @return [Yuki::Animation::TimedAnimation]
     def foe_animation
       ya = Yuki::Animation
@@ -50,13 +50,9 @@ module ZVBattleUI
 
     # @return [Array<Integer, Integer>]
     def dodge_distances
-      angle = Math.atan(Graphics.height.to_f / Graphics.width)
-      x = (Math.cos(angle) * dodge_radius).round
-      y = (Math.sin(angle) * dodge_radius).round
-      return [x, y]
+      return [25, 0]
     end
 
-    def dodge_radius = 25
     def dodge_outward_duration = 0.05
     def dodge_wait_duration = 0.4
     def dodge_inward_duration = 0.2

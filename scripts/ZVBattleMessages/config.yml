@@ -3,9 +3,7 @@ name: ZVBattleMessages
 authors:
 - zhec
 version: 0.3.0.0
-deps:
-- :name: ZVShowHPAnimationsExtended
-  :url: https://raw.githubusercontent.com/zhec9p/show-hp-animations-extended/v1/scripts/ZVShowHPAnimationsExtended.psdkplug
+deps: []
 psdk_compatibility_script: psdk.rb
 retry_psdk_compatibility_after_plugin_load: false
 added_files:
