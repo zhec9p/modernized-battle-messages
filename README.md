@@ -26,7 +26,7 @@ The following replacements are available and can be enabled or disabled in `Data
 - `replace_perish`: Replaces the message displayed for a battler's perish count with a custom animation.
 
 ## Installation
-1. Download the `ZVBattleMessages.psdkplug` and `193208.csv` from the [newest release](https://github.com/zhec9p/modernized-battle-messages/releases/latest).
+1. Download `ZVBattleMessages.psdkplug` and `193208.csv` from the [newest release](https://github.com/zhec9p/modernized-battle-messages/releases/latest).
 2. Place the downloaded .psdkplug file in the `scripts` subdirectory of your project's root folder.
 3. Open the `cmd.bat` file located in your project's root folder. This will bring up a command prompt.
 4. In the command prompt, type `psdk --util=plugin load` and press Enter.
