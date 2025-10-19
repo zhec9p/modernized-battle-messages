@@ -17,18 +17,28 @@ module Configs
       # @return [Boolean]
       attr_accessor :replace_unaffected
 
+      # Replaces the message displayed when an attack misses with a popup and battler animation
+      # @return [Boolean]
+      attr_accessor :replace_miss
+
       # Replaces the message displayed when a battler's stat stage changes with a popup animation. This also speeds up
       # the vanilla stat change animation, which the popup will overlap with
       # @return [Boolean]
       attr_accessor :replace_stat_change
 
-      # Replaces the message displayed when an attack misses with a popup and battler animation
-      # @return [Boolean]
-      attr_accessor :replace_miss
-
       # Replaces the message displayed for a battler's perish count with a custom animation
       # @return [Boolean]
       attr_accessor :replace_perish
+
+      def initialize
+        @csv_id                = 93_208
+        @replace_effectiveness = true
+        @replace_critical_hit  = true
+        @replace_unaffected    = true
+        @replace_miss          = true
+        @replace_stat_change   = true
+        @replace_perish        = true
+      end
     end
   end
 
