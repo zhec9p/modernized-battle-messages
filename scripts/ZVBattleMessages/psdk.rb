@@ -1,5 +1,5 @@
 proc do
-  raise 'This plugin requires PSDK 26.47 or later' if PSDK_VERSION < 6703
+  raise 'This plugin requires PSDK 26.48 or newer' if PSDK_VERSION < 6704
 
   check_class_names = proc do |scope, class_names|
     name_conflicts = class_names.find_all { |n| scope.const_defined?(n) }.map { |n| "#{scope}::#{n}" }

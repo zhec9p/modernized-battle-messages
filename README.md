@@ -44,7 +44,7 @@ To uninstall:
 3D battle camera is not supported.
 
 ## Dependencies
-- PSDK 26.47 or newer
+- PSDK 26.48 or newer
 
 ## Credits
 #### Plugin Creator
