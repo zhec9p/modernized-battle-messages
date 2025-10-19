@@ -27,19 +27,27 @@ module ZVBattleMsg
     # @note This animation doesn't dispose
     def create_animation
       ya = Yuki::Animation
-      fade_in  = -> { ya.opacity_change(fade_in_duration, @sprite_stack, 0, 255) }
-      fade_out = -> { ya.opacity_change(fade_out_duration, @sprite_stack, 255, 0) }
-      wait     = -> { ya.wait(idle_duration) }
 
       x = @target_sprite.x + x_offset
       y = @target_sprite.y + y_offset
-      anim = ya.move_discreet(0, @sprite_stack, x, y, x, y)
-      anim.play_before(fade_in.call)
-          .play_before(wait.call)
-          .play_before(fade_out.call)
-          .play_before(fade_in.call)
-          .play_before(wait.call)
-          .play_before(fade_out.call)
+      battler_opacity1 = @target_sprite.opacity
+      battler_opacity2 = (battler_opacity_factor * battler_opacity1).round
+
+      fade_in  = ->(sp, opa1 = 0, opa2 = 255) { ya.opacity_change(fade_in_duration, sp, opa1, opa2) }
+      fade_out = ->(sp, opa1 = 255, opa2 = 0) { ya.opacity_change(fade_out_duration, sp, opa1, opa2) }
+      stay     = -> { ya.wait(fade_stay_duration) }
+
+      popup_anim = ya.move_discreet(0, @sprite_stack, x, y, x, y)
+      popup_anim.play_before(fade_in.call(@sprite_stack))
+                .play_before(stay.call)
+                .play_before(fade_out.call(@sprite_stack))
+                .play_before(fade_in.call(@sprite_stack))
+                .play_before(stay.call)
+
+      anim = fade_in.call(@target_sprite, battler_opacity1, battler_opacity2)
+      anim.parallel_add(popup_anim)
+      anim.play_before(fade_out.call(@sprite_stack))
+          .parallel_add(fade_in.call(@target_sprite, battler_opacity2, battler_opacity1))
 
       return anim
     end
@@ -52,22 +60,9 @@ module ZVBattleMsg
       return File.join(Constants::DIR_NAME, DIR_NAME, 'no-effect')
     end
 
-    # Duration of each fade-in part of the animation
-    # @return [Float]
-    def fade_in_duration
-      return 0.125
-    end
-
-    # Duration of each fade-out part of the animation
-    # @return [Float]
-    def fade_out_duration
-      return 0.125
-    end
-
-    # Duration of each idle part of the animation
-    # @return [Float]
-    def idle_duration
-      return 0.4
-    end
+    def fade_in_duration = 0.125
+    def fade_out_duration = 0.125
+    def fade_stay_duration = 0.4
+    def battler_opacity_factor = 0.75
   end
 end

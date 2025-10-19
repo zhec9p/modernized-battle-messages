@@ -57,7 +57,7 @@ module ZVBattleMsg
     # y offset for the animation
     # @return [Integer]
     def y_offset
-      return -20
+      return -40
     end
   end
 

@@ -3,6 +3,7 @@ module ZVBattleMsg
     return 'en'
   end
 
+  # @return [String]
   def self.translate_animation_filename(filename)
     new_filename = filename
     new_filename += "_#{$options.language}" if $options.language != home_language

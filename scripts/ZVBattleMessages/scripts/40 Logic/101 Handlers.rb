@@ -7,7 +7,11 @@ module Battle
           return if power.zero? && amount.zero?
 
           @scene.visual.show_stat_animation(target, amount, stat) if amount != 0
-          @scene.zv_log_battle_stat_change(stat, power, amount, target) unless no_message
+
+          unless no_message
+            text_index = stat_text_index(amount, power)
+            @scene.zv_log_battle_message(parse_text_with_pokemon(19, TEXT_POS[stat][text_index], target))
+          end
         end
       end
       prepend ZVBattleMsgStatChangeHandler
