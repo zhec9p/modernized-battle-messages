@@ -3,7 +3,7 @@
   "replace_effectiveness": true,
   "replace_critical_hit": true,
   "replace_unaffected": true,
-  "replace_stat_change": true,
   "replace_miss": true,
+  "replace_stat_change": true,
   "replace_perish": true
 }

@@ -33,7 +33,6 @@ proc do
       zv_show_unaffected_animation
       zv_show_miss_animation
       zv_show_perish_animation
-      zv_hit_criticality_message
     ]
   )
 end.call
