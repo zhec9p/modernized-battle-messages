@@ -1,6 +1,8 @@
 module ZVBattleMsg
   # Popup message when a super effective move hits
-  class SuperEffectivePopup < PopupMessagePreset
+  class SuperEffectivePopup < PopupMessage
+    include PopupMessageBasicAnimation
+
     private
 
     # Filename of the sprite to use in the popup message
@@ -11,7 +13,9 @@ module ZVBattleMsg
   end
 
   # Popup message when a not very effective move hits
-  class NotVeryEffectivePopup < PopupMessagePreset
+  class NotVeryEffectivePopup < PopupMessage
+    include PopupMessageBasicAnimation
+
     private
 
     # Filename of the sprite to use in the popup message

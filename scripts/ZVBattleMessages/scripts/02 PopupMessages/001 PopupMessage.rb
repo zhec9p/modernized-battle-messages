@@ -3,6 +3,11 @@ module ZVBattleMsg
   # Tested with 96px x 17px popup message images on 96px x 96px battler sprites in 2D battle mode.
   class PopupMessage
     DIR_NAME = 'popup-messages'
+    OFFSETS = [0, -42]
+    ZOOM_VALUES = [1, 1]
+    TEXT_DIMENSIONS = [96, 8]
+    TEXT_OUTLINE_SIZE = 0
+    TEXT_ALIGNMENT = 1
 
     # @param viewport [Viewport]
     # @param scene [Battle::Scene]
@@ -31,38 +36,89 @@ module ZVBattleMsg
     private
 
     # Sprite for the popup message
+    # @return [Sprite]
     def create_sprite
       filename = ZVBattleMsg.translate_animation_filename(popup_filename)
       sprite = @sprite_stack.add_sprite(0, 0, filename)
       sprite.set_origin(sprite.width / 2, sprite.height)
+      sprite.zoom = zoom_value
+      return sprite
     end
 
     # Text for the popup message
+    # @return [Text]
     def create_text
-      nil
+      content = text_content
+      return unless content
+
+      text = @sprite_stack.with_font(20) do
+        next @sprite_stack.add_text(
+          *text_position, *TEXT_DIMENSIONS,
+          content,
+          TEXT_ALIGNMENT, TEXT_OUTLINE_SIZE, color: text_color_id
+        )
+      end
+
+      text_set_zoom(text, zoom_value)
+      return text
     end
 
     # Filename of the sprite to use in the popup message
     # @return [String]
     def popup_filename
-      raise 'This method should be implemented in the subclass'
+      raise 'This method must be implemented in the subclass'
     end
 
-    # x offset for the animation
+    # X offset for the animation
     # @return [Integer]
     def x_offset
-      return 0
+      offset = OFFSETS[0]
+      offset += Graphics.width / 2 if Battle::BATTLE_CAMERA_3D
+      return offset
     end
 
-    # y offset for the animation
+    # Y offset for the animation
     # @return [Integer]
     def y_offset
-      return -40
+      offset = OFFSETS[1]
+      offset += Graphics.height / 2 if Battle::BATTLE_CAMERA_3D
+      return offset
+    end
+
+    # Zoom value for the popup
+    # @return [Integer]
+    def zoom_value
+      zoom = ZOOM_VALUES[1]
+      zoom = ZOOM_VALUES[0] if Battle::BATTLE_CAMERA_3D && @target_sprite.bank == 0
+      return zoom
+    end
+
+    # Message to display on the popup
+    # @return [String, nil]
+    # @note All text_* methods after this one are unused if this one returns nil
+    def text_content = nil
+
+    # Position of the text relative to the popup's sprite stack
+    # @return [Array<Integer>]
+    def text_position
+      raise 'This method should be implemented in the subclass if there is text content'
+    end
+
+    # Text color ID based on Fonts
+    # @return [Integer, nil]
+    def text_color_id = 9
+
+    # Emulate a "zoom" setting for the text
+    # @param text [Text]
+    # @param zoom [Integer] Zoom value to apply
+    def text_set_zoom(text, zoom)
+      text.y -= (text.height * (zoom - 1)).round
+      text.size = (text.size * zoom).round
     end
   end
 
-  # Popup message class with a preset animation
-  class PopupMessagePreset < PopupMessage
+  # Basic popup message animation creation
+  module PopupMessageBasicAnimation
     # @return [Yuki::Animation::TimedAnimation]
     # @note This animation doesn't dispose
     def create_animation

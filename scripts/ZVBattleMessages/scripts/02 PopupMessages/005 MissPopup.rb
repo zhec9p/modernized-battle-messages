@@ -1,6 +1,8 @@
 module ZVBattleMsg
   # Popup message when a move misses the target
-  class MissPopup < PopupMessagePreset
+  class MissPopup < PopupMessage
+    include PopupMessageBasicAnimation
+
     # @return [Yuki::Animation::TimedAnimation]
     # @note This animation doesn't dispose
     def create_animation

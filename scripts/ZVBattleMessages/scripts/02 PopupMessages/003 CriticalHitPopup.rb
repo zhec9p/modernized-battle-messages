@@ -1,5 +1,7 @@
 module ZVBattleMsg
-  class CriticalHitPopup < PopupMessagePreset
+  class CriticalHitPopup < PopupMessage
+    include PopupMessageBasicAnimation
+
     private
 
     # Filename of the sprite to use in the popup message

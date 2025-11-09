@@ -1,6 +1,6 @@
 module ZVBattleMsg
   class StatChangePopup < PopupMessage
-    TEXT_IDS = { atk: 0, dfe: 1, spd: 2, ats: 3, dfs: 4, acc: 5, eva: 6 }
+    STAT_TEXT_IDS = { atk: 0, dfe: 1, spd: 2, ats: 3, dfs: 4, acc: 5, eva: 6 }
 
     # @param viewport [Viewport]
     # @param scene [Battle::Scene]
@@ -33,30 +33,24 @@ module ZVBattleMsg
 
     private
 
-    # Text for the popup message
-    def create_text
-      stage_text = @stages.to_s
-      stage_text.prepend('+') if stat_up?
-      message = "#{stat_name} #{stage_text}"
-      align_center = 1
-      white = 9
-
-      @sprite_stack.with_font(20) do
-        @sprite_stack.add_text(-48, -11, 96, 8, message, align_center, 0, color: white)
-      end
-    end
-
     # Filename of the sprite to use in the popup message
     # @return [String]
     def popup_filename
       return File.join(Constants::DIR_NAME, DIR_NAME, 'stat-change')
     end
 
-    # 3-letter name of the stat
-    # @return [String]
-    def stat_name
-      return parse_text(Configs.zv_battle_msg.csv_id, TEXT_IDS[@stat])
+    # Message to display on the popup
+    # @return [String, nil]
+    def text_content
+      stat_name = parse_text(Configs.zv_battle_msg.csv_id, STAT_TEXT_IDS[@stat])
+      stage_text = @stages.to_s
+      stage_text.prepend('+') if stat_up?
+      return "#{stat_name} #{stage_text}"
     end
+
+    # Position of the text relative to the popup's sprite stack
+    # @return [Array<Integer>]
+    def text_position = [-48, -12]
 
     # @return [Boolean]
     def stat_up?
@@ -66,9 +60,7 @@ module ZVBattleMsg
     class << self
       # Duration of the main part of the animation
       # @return [Float]
-      def main_duration
-        return 1.0
-      end
+      def main_duration = 1.0
     end
   end
 end

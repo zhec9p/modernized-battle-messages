@@ -66,7 +66,18 @@ module ZVBattleMsg
       sprite = @sprite_stack.add_sprite(0, -32, filename, *args, type: type)
       sprite.opacity = 0
       sprite.set_origin(sprite.width / 2, sprite.height / 2)
+      apply_3d_battle_settings(sprite)
       return sprite
+    end
+
+    # Apply the 3D settings to the sprite if the 3D camera is enabled
+    # @param sprite [Sprite, Spritesheet]
+    def apply_3d_battle_settings(sprite)
+      return unless Battle::BATTLE_CAMERA_3D
+
+      sprite.shader = Shader.create(:fake_3d)
+      @scene.visual.sprites3D.append(sprite)
+      sprite.shader.set_float_uniform('z', @target_sprite.shader_z_position)
     end
 
     # x offset for the animation
