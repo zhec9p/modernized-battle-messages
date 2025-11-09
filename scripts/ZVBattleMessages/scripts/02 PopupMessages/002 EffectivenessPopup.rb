@@ -8,7 +8,7 @@ module ZVBattleMsg
     # Filename of the sprite to use in the popup message
     # @return [String]
     def popup_filename
-      return File.join(Constants::DIR_NAME, DIR_NAME, 'super-effective')
+      return File.join(ROOT_DIR_NAME, DIR_NAME, 'super-effective')
     end
   end
 
@@ -21,7 +21,7 @@ module ZVBattleMsg
     # Filename of the sprite to use in the popup message
     # @return [String]
     def popup_filename
-      return File.join(Constants::DIR_NAME, DIR_NAME, 'not-very-effective')
+      return File.join(ROOT_DIR_NAME, DIR_NAME, 'not-very-effective')
     end
   end
 
@@ -53,7 +53,7 @@ module ZVBattleMsg
     # Filename of the sprite to use in the popup message
     # @return [String]
     def popup_filename
-      return File.join(Constants::DIR_NAME, DIR_NAME, 'no-effect')
+      return File.join(ROOT_DIR_NAME, DIR_NAME, 'no-effect')
     end
 
     def fade_in_duration = 0.125

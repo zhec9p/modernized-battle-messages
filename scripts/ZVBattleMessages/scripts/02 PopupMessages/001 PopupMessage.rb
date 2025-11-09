@@ -3,7 +3,7 @@ module ZVBattleMsg
   # Tested with 96px x 17px popup message images on 96px x 96px battler sprites in 2D battle mode.
   class PopupMessage
     DIR_NAME = 'popup-messages'
-    OFFSETS = [0, -42]
+    OFFSETS = [0, -43]
     ZOOM_VALUES = [1, 1]
     TEXT_DIMENSIONS = [96, 8]
     TEXT_OUTLINE_SIZE = 0

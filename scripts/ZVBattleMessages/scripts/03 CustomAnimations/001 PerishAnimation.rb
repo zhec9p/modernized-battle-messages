@@ -98,13 +98,13 @@ module ZVBattleMsg
       return 0.5
     end
 
-    def clock_filename      = File.join(Constants::DIR_NAME, DIR_NAME, 'clock')
-    def clock_face_filename = File.join(Constants::DIR_NAME, DIR_NAME, 'clock-perish-face')
-    def hand_filename       = File.join(Constants::DIR_NAME, DIR_NAME, 'clock-hand')
-    def counter_filename    = File.join(Constants::DIR_NAME, DIR_NAME, 'clock-countdown')
+    def clock_filename      = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock')
+    def clock_face_filename = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock-perish-face')
+    def hand_filename       = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock-hand')
+    def counter_filename    = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock-countdown')
 
-    def clock_se_filename = File.join(Constants::DIR_NAME, DIR_NAME, 'clock-ticking-single')
-    def ball_se_filename  = File.join(Constants::DIR_NAME, DIR_NAME, 'bell-tolling-single')
+    def clock_se_filename = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock-ticking-single')
+    def ball_se_filename  = File.join(ROOT_DIR_NAME, DIR_NAME, 'bell-tolling-single')
 
     def counter_dimensions = [10, 1]
   end

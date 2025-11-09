@@ -36,7 +36,7 @@ module ZVBattleMsg
     # Filename of the sprite to use in the popup message
     # @return [String]
     def popup_filename
-      return File.join(Constants::DIR_NAME, DIR_NAME, 'stat-change')
+      return File.join(ROOT_DIR_NAME, DIR_NAME, 'stat-change')
     end
 
     # Message to display on the popup
@@ -50,7 +50,7 @@ module ZVBattleMsg
 
     # Position of the text relative to the popup's sprite stack
     # @return [Array<Integer>]
-    def text_position = [-48, -12]
+    def text_position = [-48, -13]
 
     # @return [Boolean]
     def stat_up?

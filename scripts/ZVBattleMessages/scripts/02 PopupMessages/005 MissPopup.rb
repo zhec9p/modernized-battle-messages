@@ -21,7 +21,7 @@ module ZVBattleMsg
     # Filename of the sprite to use in the popup message
     # @return [String]
     def popup_filename
-      return File.join(Constants::DIR_NAME, DIR_NAME, 'miss')
+      return File.join(ROOT_DIR_NAME, DIR_NAME, 'miss')
     end
 
     # Animation of player/ally battler sprite in parallel of the popup message
