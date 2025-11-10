@@ -4,9 +4,7 @@ module ZVBattleMsg
   class PopupMessage
     DIR_NAME = 'popup-messages'
     OFFSETS = [0, -43]
-    ZOOM_VALUES = [1, 1]
     TEXT_DIMENSIONS = [96, 8]
-    TEXT_OUTLINE_SIZE = 0
     TEXT_ALIGNMENT = 1
 
     # @param viewport [Viewport]
@@ -41,7 +39,6 @@ module ZVBattleMsg
       filename = ZVBattleMsg.translate_animation_filename(popup_filename)
       sprite = @sprite_stack.add_sprite(0, 0, filename)
       sprite.set_origin(sprite.width / 2, sprite.height)
-      sprite.zoom = zoom_value
       return sprite
     end
 
@@ -52,14 +49,9 @@ module ZVBattleMsg
       return unless content
 
       text = @sprite_stack.with_font(20) do
-        next @sprite_stack.add_text(
-          *text_position, *TEXT_DIMENSIONS,
-          content,
-          TEXT_ALIGNMENT, TEXT_OUTLINE_SIZE, color: text_color_id
-        )
+        @sprite_stack.add_text(*text_position, *TEXT_DIMENSIONS, content, TEXT_ALIGNMENT, color: text_color_id)
       end
 
-      text_set_zoom(text, zoom_value)
       return text
     end
 
@@ -85,14 +77,6 @@ module ZVBattleMsg
       return offset
     end
 
-    # Zoom value for the popup
-    # @return [Integer]
-    def zoom_value
-      zoom = ZOOM_VALUES[1]
-      zoom = ZOOM_VALUES[0] if Battle::BATTLE_CAMERA_3D && @target_sprite.bank == 0
-      return zoom
-    end
-
     # Message to display on the popup
     # @return [String, nil]
     # @note All text_* methods after this one are unused if this one returns nil
@@ -107,14 +91,6 @@ module ZVBattleMsg
     # Text color ID based on Fonts
     # @return [Integer, nil]
     def text_color_id = 9
-
-    # Emulate a "zoom" setting for the text
-    # @param text [Text]
-    # @param zoom [Integer] Zoom value to apply
-    def text_set_zoom(text, zoom)
-      text.y -= (text.height * (zoom - 1)).round
-      text.size = (text.size * zoom).round
-    end
   end
 
   # Basic popup message animation creation
