@@ -1,23 +1,27 @@
 module ZVBattleMsg
   # Popup message when a super effective move hits
-  class SuperEffectivePopup < PopupMessagePreset
+  class SuperEffectivePopup < PopupMessage
+    include PopupMessageBasicAnimation
+
     private
 
     # Filename of the sprite to use in the popup message
     # @return [String]
     def popup_filename
-      return File.join(Constants::DIR_NAME, DIR_NAME, 'super-effective')
+      return File.join(ROOT_DIR_NAME, DIR_NAME, 'super-effective')
     end
   end
 
   # Popup message when a not very effective move hits
-  class NotVeryEffectivePopup < PopupMessagePreset
+  class NotVeryEffectivePopup < PopupMessage
+    include PopupMessageBasicAnimation
+
     private
 
     # Filename of the sprite to use in the popup message
     # @return [String]
     def popup_filename
-      return File.join(Constants::DIR_NAME, DIR_NAME, 'not-very-effective')
+      return File.join(ROOT_DIR_NAME, DIR_NAME, 'not-very-effective')
     end
   end
 
@@ -49,11 +53,11 @@ module ZVBattleMsg
     # Filename of the sprite to use in the popup message
     # @return [String]
     def popup_filename
-      return File.join(Constants::DIR_NAME, DIR_NAME, 'no-effect')
+      return File.join(ROOT_DIR_NAME, DIR_NAME, 'no-effect')
     end
 
-    def fade_in_duration = 0.125
+    def fade_in_duration  = 0.125
     def fade_out_duration = 0.125
-    def wait_duration = 0.4
+    def wait_duration     = 0.4
   end
 end

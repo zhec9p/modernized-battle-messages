@@ -1,6 +1,8 @@
 module ZVBattleMsg
   # Popup message when a move misses the target
-  class MissPopup < PopupMessagePreset
+  class MissPopup < PopupMessage
+    include PopupMessageBasicAnimation
+
     # @return [Yuki::Animation::TimedAnimation]
     # @note This animation doesn't dispose
     def create_animation
@@ -19,7 +21,7 @@ module ZVBattleMsg
     # Filename of the sprite to use in the popup message
     # @return [String]
     def popup_filename
-      return File.join(Constants::DIR_NAME, DIR_NAME, 'miss')
+      return File.join(ROOT_DIR_NAME, DIR_NAME, 'miss')
     end
 
     # Animation of player/ally battler sprite in parallel of the popup message
@@ -54,7 +56,7 @@ module ZVBattleMsg
     end
 
     def dodge_outward_duration = 0.075
-    def dodge_wait_duration = 0.4
-    def dodge_inward_duration = 0.2
+    def dodge_wait_duration    = 0.4
+    def dodge_inward_duration  = 0.2
   end
 end

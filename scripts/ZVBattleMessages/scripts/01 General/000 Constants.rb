@@ -1,5 +1,3 @@
 module ZVBattleMsg
-  module Constants
-    DIR_NAME = 'zv-battle-messages'
-  end
+  ROOT_DIR_NAME = 'zv-battle-messages'
 end

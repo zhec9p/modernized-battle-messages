@@ -2,7 +2,16 @@ module ZVBattleMsg
   # Base class for creating an animation that displays a short popup message on a battler.
   # Tested with 96px x 17px popup message images on 96px x 96px battler sprites in 2D battle mode.
   class PopupMessage
+    # Subdirectory in audio/ or animation/ holding popup messages' assets
     DIR_NAME = 'popup-messages'
+
+    # Offsets for most popup messages relative to a battler's sprite.
+    #   OFFSETS[0] => Player battler
+    #   OFFSETS[1] => Enemey battler
+    OFFSETS = [[0, -42], [0, -42]]
+
+    TEXT_DIMENSIONS = [96, 8] # Dimensions of the popup's text surface. Unused if text_content returns nil
+    TEXT_ALIGNMENT = 1        # Center alignment for text. Unused if text_content returns nil
 
     # @param viewport [Viewport]
     # @param scene [Battle::Scene]
@@ -31,38 +40,67 @@ module ZVBattleMsg
     private
 
     # Sprite for the popup message
+    # @return [Sprite]
     def create_sprite
       filename = ZVBattleMsg.translate_animation_filename(popup_filename)
       sprite = @sprite_stack.add_sprite(0, 0, filename)
       sprite.set_origin(sprite.width / 2, sprite.height)
+      return sprite
     end
 
     # Text for the popup message
+    # @return [Text]
     def create_text
-      nil
+      content = text_content
+      return unless content
+
+      text = @sprite_stack.with_font(20) do
+        @sprite_stack.add_text(*text_position, *TEXT_DIMENSIONS, content, TEXT_ALIGNMENT, color: text_color_id)
+      end
+
+      return text
     end
 
     # Filename of the sprite to use in the popup message
     # @return [String]
     def popup_filename
-      raise 'This method should be implemented in the subclass'
+      raise 'This method must be implemented in the subclass'
     end
 
-    # x offset for the animation
+    # X offset for the animation
     # @return [Integer]
     def x_offset
-      return 0
+      offset = OFFSETS[@target_sprite.bank][0]
+      offset += Graphics.width / 2 if Battle::BATTLE_CAMERA_3D
+      return offset
     end
 
-    # y offset for the animation
+    # Y offset for the animation
     # @return [Integer]
     def y_offset
-      return -40
+      offset = OFFSETS[@target_sprite.bank][1]
+      offset += Graphics.height / 2 if Battle::BATTLE_CAMERA_3D
+      return offset
     end
+
+    # Message to display on the popup
+    # @return [String, nil]
+    # @note All text_* methods after this one are unused if this one returns nil
+    def text_content = nil
+
+    # Position of the text relative to the popup's sprite stack
+    # @return [Array<Integer>]
+    def text_position
+      raise "This method should be implemented in the subclass if `text_content` doesn't return nil"
+    end
+
+    # Text color ID based on Fonts
+    # @return [Integer, nil]
+    def text_color_id = 9
   end
 
-  # Popup message class with a preset animation
-  class PopupMessagePreset < PopupMessage
+  # Basic popup message animation creation
+  module PopupMessageBasicAnimation
     # @return [Yuki::Animation::TimedAnimation]
     # @note This animation doesn't dispose
     def create_animation

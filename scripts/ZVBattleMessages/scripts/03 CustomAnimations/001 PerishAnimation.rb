@@ -1,6 +1,7 @@
 module ZVBattleMsg
   # Handle the perish count animation in the battle scene
   class PerishAnimation
+    # Subdirectory in audio/ or animation/ holding this animation's assets
     DIR_NAME = 'perish'
 
     # @param viewport [Viewport]
@@ -66,7 +67,18 @@ module ZVBattleMsg
       sprite = @sprite_stack.add_sprite(0, -32, filename, *args, type: type)
       sprite.opacity = 0
       sprite.set_origin(sprite.width / 2, sprite.height / 2)
+      apply_3d_battle_settings(sprite)
       return sprite
+    end
+
+    # Apply the 3D settings to the sprite if the 3D camera is enabled
+    # @param sprite [Sprite, Spritesheet]
+    def apply_3d_battle_settings(sprite)
+      return unless Battle::BATTLE_CAMERA_3D
+
+      sprite.shader = Shader.create(:fake_3d)
+      @scene.visual.sprites3D.append(sprite)
+      sprite.shader.set_float_uniform('z', @target_sprite.shader_z_position)
     end
 
     # x offset for the animation
@@ -87,13 +99,13 @@ module ZVBattleMsg
       return 0.5
     end
 
-    def clock_filename      = File.join(Constants::DIR_NAME, DIR_NAME, 'clock')
-    def clock_face_filename = File.join(Constants::DIR_NAME, DIR_NAME, 'clock-perish-face')
-    def hand_filename       = File.join(Constants::DIR_NAME, DIR_NAME, 'clock-hand')
-    def counter_filename    = File.join(Constants::DIR_NAME, DIR_NAME, 'clock-countdown')
+    def clock_filename      = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock')
+    def clock_face_filename = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock-perish-face')
+    def hand_filename       = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock-hand')
+    def counter_filename    = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock-countdown')
 
-    def clock_se_filename = File.join(Constants::DIR_NAME, DIR_NAME, 'clock-ticking-single')
-    def ball_se_filename  = File.join(Constants::DIR_NAME, DIR_NAME, 'bell-tolling-single')
+    def clock_se_filename = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock-ticking-single')
+    def ball_se_filename  = File.join(ROOT_DIR_NAME, DIR_NAME, 'bell-tolling-single')
 
     def counter_dimensions = [10, 1]
   end
