@@ -56,7 +56,7 @@ module ZVBattleMsg
     end
 
     def dodge_outward_duration = 0.075
-    def dodge_wait_duration = 0.4
-    def dodge_inward_duration = 0.2
+    def dodge_wait_duration    = 0.4
+    def dodge_inward_duration  = 0.2
   end
 end

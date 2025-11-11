@@ -1,6 +1,7 @@
 module ZVBattleMsg
   # Handle the perish count animation in the battle scene
   class PerishAnimation
+    # Subdirectory in audio/ or animation/ holding this animation's assets
     DIR_NAME = 'perish'
 
     # @param viewport [Viewport]

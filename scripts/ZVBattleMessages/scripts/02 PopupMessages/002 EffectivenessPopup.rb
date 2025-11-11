@@ -56,8 +56,8 @@ module ZVBattleMsg
       return File.join(ROOT_DIR_NAME, DIR_NAME, 'no-effect')
     end
 
-    def fade_in_duration = 0.125
+    def fade_in_duration  = 0.125
     def fade_out_duration = 0.125
-    def wait_duration = 0.4
+    def wait_duration     = 0.4
   end
 end

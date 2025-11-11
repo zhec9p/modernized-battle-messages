@@ -2,10 +2,16 @@ module ZVBattleMsg
   # Base class for creating an animation that displays a short popup message on a battler.
   # Tested with 96px x 17px popup message images on 96px x 96px battler sprites in 2D battle mode.
   class PopupMessage
+    # Subdirectory in audio/ or animation/ holding popup messages' assets
     DIR_NAME = 'popup-messages'
-    OFFSETS = [0, -43]
-    TEXT_DIMENSIONS = [96, 8]
-    TEXT_ALIGNMENT = 1
+
+    # Offsets for most popup messages relative to a battler's sprite.
+    #   OFFSETS[0] => Player battler
+    #   OFFSETS[1] => Enemey battler
+    OFFSETS = [[0, -42], [0, -42]]
+
+    TEXT_DIMENSIONS = [96, 8] # Dimensions of the popup's text surface. Unused if text_content returns nil
+    TEXT_ALIGNMENT = 1        # Center alignment for text. Unused if text_content returns nil
 
     # @param viewport [Viewport]
     # @param scene [Battle::Scene]
@@ -64,7 +70,7 @@ module ZVBattleMsg
     # X offset for the animation
     # @return [Integer]
     def x_offset
-      offset = OFFSETS[0]
+      offset = OFFSETS[@target_sprite.bank][0]
       offset += Graphics.width / 2 if Battle::BATTLE_CAMERA_3D
       return offset
     end
@@ -72,7 +78,7 @@ module ZVBattleMsg
     # Y offset for the animation
     # @return [Integer]
     def y_offset
-      offset = OFFSETS[1]
+      offset = OFFSETS[@target_sprite.bank][1]
       offset += Graphics.height / 2 if Battle::BATTLE_CAMERA_3D
       return offset
     end
@@ -85,7 +91,7 @@ module ZVBattleMsg
     # Position of the text relative to the popup's sprite stack
     # @return [Array<Integer>]
     def text_position
-      raise 'This method should be implemented in the subclass if there is text content'
+      raise "This method should be implemented in the subclass if `text_content` doesn't return nil"
     end
 
     # Text color ID based on Fonts
