@@ -3,7 +3,6 @@
 ## Table of Contents
 - [Overview](#overview)
 - [Installation](#installation)
-- [Known Limitations](#known-limitations)
 - [Dependencies](#dependencies)
 - [Credits](#credits)
 
@@ -40,9 +39,6 @@ To uninstall:
 2. Open the `cmd.bat` file located in your project's root folder. Enter in `psdk --util=plugin load`. Enter "Y" when asked whether to remove the files added by the plugin.
 3. Delete `193208.csv` or whatever you named that CSV file from `YOUR_PROJECT_ROOT/Data/Text/Dialogs`.
 
-## Known Limitations
-3D battle camera is not supported.
-
 ## Dependencies
 - PSDK 26.48 or newer
 
@@ -55,4 +51,4 @@ To uninstall:
 - BELL.wav by kgeshev -- https://freesound.org/s/378799/
 
 #### Special Thanks
-- Aelysya for the French translations.
+- Aelysya for the French translations
