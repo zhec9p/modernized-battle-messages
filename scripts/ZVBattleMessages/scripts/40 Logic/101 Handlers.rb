@@ -19,7 +19,7 @@ module Battle
 
     class DamageHandler
       module ZVBattleMsgDamageHandler
-        def damage_change(*args, **kwargs, &block)
+        def damage_change(*args, **_kwargs, &_block)
           skill = args[3]
           @logic.zv_battle_msg_internal.critical_hits << [skill&.critical_hit?]
           ret = super
@@ -27,7 +27,7 @@ module Battle
           return ret
         end
 
-        def drain(*args, **kwargs, &block)
+        def drain(*args, **_kwargs, &_block)
           skill = args[3]
           @logic.zv_battle_msg_internal.critical_hits << [skill&.critical_hit?]
           ret = super
