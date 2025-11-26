@@ -42,7 +42,7 @@ module ZVBattleMsg
     # Filename of the sprite to use in the popup message
     # @return [String]
     def popup_filename
-      return File.join(ROOT_DIR_NAME, DIR_NAME, 'stat-change')
+      return file_join(DIR_NAME, 'stat-change')
     end
 
     # Message to display on the popup

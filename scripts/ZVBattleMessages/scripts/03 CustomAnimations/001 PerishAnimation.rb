@@ -39,7 +39,7 @@ module ZVBattleMsg
                     fade_in.call(@hand),
                     ya.se_play(clock_se_filename)),
         ya.rotation(hand_duration, @hand, 0, 360),
-        ya.parallel(@countdown == 0 ? ya.se_play(bell_se_filename) : ya.wait(0)),
+        ya.parallel(@countdown == 0 ? ya.se_play(bell_se_filename) : ya.wait(0),
                     ya.send_command_to(@hand, :opacity=, 0),
                     ya.send_command_to(@counter, :opacity=, 255)),
         ya.wait(0.4),
@@ -90,12 +90,12 @@ module ZVBattleMsg
       return 0.5
     end
 
-    def clock_filename      = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock')
-    def clock_face_filename = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock-perish-face')
-    def hand_filename       = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock-hand')
-    def counter_filename    = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock-countdown')
-    def clock_se_filename   = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock-ticking-single')
-    def bell_se_filename    = File.join(ROOT_DIR_NAME, DIR_NAME, 'bell-tolling-single')
+    def clock_filename      = file_join(DIR_NAME, 'clock')
+    def clock_face_filename = file_join(DIR_NAME, 'clock-perish-face')
+    def hand_filename       = file_join(DIR_NAME, 'clock-hand')
+    def counter_filename    = file_join(DIR_NAME, 'clock-countdown')
+    def clock_se_filename   = file_join(DIR_NAME, 'clock-ticking-single')
+    def bell_se_filename    = file_join(DIR_NAME, 'bell-tolling-single')
     def counter_dimensions  = [10, 1]
   end
 end

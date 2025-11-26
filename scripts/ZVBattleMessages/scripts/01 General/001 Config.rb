@@ -1,10 +1,12 @@
-module ZVBattleMsg
-  ROOT_DIR_NAME = 'zv-battle-messages'
-end
-
 module Configs
   module Project
     class ZVBattleMsg
+      # Main directory name for assets in the following paths:
+      # - graphics/animations/
+      # - audio/se/
+      # @return [String]
+      attr_accessor :dir_name
+
       # ID of this plugin's CSV file
       # @return [Integer]
       attr_accessor :csv_id
