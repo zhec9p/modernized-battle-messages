@@ -13,23 +13,29 @@ module ZVBattleMsg
       super(viewport, scene, target_sprite)
     end
 
-    # @return [Yuki::Animation::TimedAnimation]
+    # @return [Yuki::Animation::AnimationMixin]
     # @note This animation doesn't dispose
     def create_animation
-      x = @target_sprite.x + x_offset
-      y1 = @target_sprite.y + y_offset
-      y2 = y1 - 20
-      y1, y2 = y2, y1 unless stat_up?
-
       ya = Yuki::Animation
-      appear_anim = ya.opacity_change(0.1, @sprite_stack, 0, 255)
-      appear_anim.play_before(ya.wait(self.class.main_duration))
-                 .play_before(ya.opacity_change(0.1, @sprite_stack, 255, 0))
 
-      anim = ya.move_discreet(self.class.main_duration, @sprite_stack, x, y1, x, y2)
-      anim.parallel_add(appear_anim)
-      return anim
+      tx  = @target_sprite.x + x_offset
+      ty1 = @target_sprite.y + y_offset
+      ty2 = ty1 + y_displacement
+      ty1, ty2 = ty2, ty1 unless stat_up?
+
+      return ya.parallel(
+        ya.move_discreet(self.class.main_duration, self, tx, ty1, tx, ty2),
+        ya.player(
+          ya.opacity_change(0.1, self, 0, 255),
+          ya.wait(self.class.main_duration),
+          ya.opacity_change(0.1, self, 255, 0)
+        )
+      )
     end
+
+    # Duration of the main part of the animation
+    # @return [Float]
+    def main_duration = 1.0
 
     private
 
@@ -57,10 +63,8 @@ module ZVBattleMsg
       return @stages >= 0
     end
 
-    class << self
-      # Duration of the main part of the animation
-      # @return [Float]
-      def main_duration = 1.0
-    end
+    # Y-axis displacement of the popup message in the animation
+    # @return [Integer]
+    def y_displacement = -20
   end
 end

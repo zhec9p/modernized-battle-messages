@@ -3,17 +3,13 @@ module ZVBattleMsg
   class MissPopup < PopupMessage
     include PopupMessageBasicAnimation
 
-    # @return [Yuki::Animation::TimedAnimation]
+    # @return [Yuki::Animation::AnimationMixin]
     # @note This animation doesn't dispose
     def create_animation
       ya = Yuki::Animation
-      anim = super
-      miss_anim = ya::UserBankRelativeAnimation.new
+      miss_anim = ya.user_bank_relative_animation([friend_animation, foe_animation])
       miss_anim.resolver = { user: @target_sprite }.method(:[])
-      miss_anim.play_before_on_bank(0, friend_animation)
-      miss_anim.play_before_on_bank(1, foe_animation)
-      anim.parallel_add(miss_anim)
-      return anim
+      return ya.parallel(super, miss_anim)
     end
 
     private
@@ -25,29 +21,33 @@ module ZVBattleMsg
     end
 
     # Animation of player/ally battler sprite in parallel of the popup message
-    # @return [Yuki::Animation::TimedAnimation]
+    # @return [Yuki::Animation::AnimationMixin]
     def friend_animation
       ya = Yuki::Animation
       tx = @target_sprite.x
       ty = @target_sprite.y
       dodge_x, dodge_y = dodge_distances
-      anim = ya.move_discreet(dodge_outward_duration, @target_sprite, tx, ty, tx - dodge_x, ty + dodge_y)
-      anim.play_before(ya.wait(dodge_wait_duration))
-      anim.play_before(ya.move_discreet(dodge_inward_duration, @target_sprite, tx - dodge_x, ty + dodge_y, tx, ty))
-      return anim
+
+      return ya.player(
+        ya.move_discreet(dodge_outward_duration, @target_sprite, tx, ty, tx - dodge_x, ty + dodge_y),
+        ya.wait(dodge_wait_duration),
+        ya.move_discreet(dodge_inward_duration, @target_sprite, tx - dodge_x, ty + dodge_y, tx, ty)
+      )
     end
 
     # Animation of enemy battler sprite in parallel of the popup message
-    # @return [Yuki::Animation::TimedAnimation]
+    # @return [Yuki::Animation::AnimationMixin]
     def foe_animation
       ya = Yuki::Animation
       tx = @target_sprite.x
       ty = @target_sprite.y
       dodge_x, dodge_y = dodge_distances
-      anim = ya.move_discreet(dodge_outward_duration, @target_sprite, tx, ty, tx + dodge_x, ty - dodge_y)
-      anim.play_before(ya.wait(dodge_wait_duration))
-      anim.play_before(ya.move_discreet(dodge_inward_duration, @target_sprite, tx + dodge_x, ty - dodge_y, tx, ty))
-      return anim
+
+      return ya.player(
+        ya.move_discreet(dodge_outward_duration, @target_sprite, tx, ty, tx + dodge_x, ty - dodge_y),
+        ya.wait(dodge_wait_duration),
+        ya.move_discreet(dodge_inward_duration, @target_sprite, tx + dodge_x, ty - dodge_y, tx, ty)
+      )
     end
 
     # @return [Array<Integer, Integer>]

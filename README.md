@@ -40,7 +40,7 @@ To uninstall:
 3. Delete `193208.csv` or whatever you named that CSV file from `YOUR_PROJECT_ROOT/Data/Text/Dialogs`.
 
 ## Dependencies
-- PSDK 26.48 or newer
+- PSDK 26.50 or newer
 
 ## Credits
 #### Plugin Creator

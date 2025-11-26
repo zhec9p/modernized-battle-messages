@@ -7,9 +7,7 @@ module Battle
       ya = Yuki::Animation
       target_sprite = battler_sprite(target.bank, target.position)
       perish = ZVBattleMsg::PerishAnimation.new(viewport, @scene, target_sprite, countdown)
-
-      anim = perish.create_animation
-      anim.play_before(ya.send_command_to(perish, :dispose))
+      anim = ya.player(perish.create_animation, ya.send_command_to(perish, :dispose))
       @animations << anim
       anim.start
       wait_for_animation

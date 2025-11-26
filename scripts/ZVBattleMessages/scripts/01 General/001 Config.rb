@@ -1,3 +1,7 @@
+module ZVBattleMsg
+  ROOT_DIR_NAME = 'zv-battle-messages'
+end
+
 module Configs
   module Project
     class ZVBattleMsg
@@ -7,28 +11,28 @@ module Configs
 
       # Replaces the message displayed for super-effective and not-very-effective hits with a corresponding popup animation
       # @return [Boolean]
-      attr_accessor :replace_effectiveness
+      attr_writer :replace_effectiveness
 
       # Replaces the message displayed for a critical hit with a popup animation
       # @return [Boolean]
-      attr_accessor :replace_critical_hit
+      attr_writer :replace_critical_hit
 
       # Replaces the message displayed when a move doesn't affect a battler with a popup animation
       # @return [Boolean]
-      attr_accessor :replace_unaffected
+      attr_writer :replace_unaffected
 
       # Replaces the message displayed when an attack misses with a popup and battler animation
       # @return [Boolean]
-      attr_accessor :replace_miss
+      attr_writer :replace_miss
 
       # Replaces the message displayed when a battler's stat stage changes with a popup animation. This also speeds up
       # the vanilla stat change animation, which the popup will overlap with
       # @return [Boolean]
-      attr_accessor :replace_stat_change
+      attr_writer :replace_stat_change
 
       # Replaces the message displayed for a battler's perish count with a custom animation
       # @return [Boolean]
-      attr_accessor :replace_perish
+      attr_writer :replace_perish
 
       def initialize
         @csv_id                = 93_208
@@ -39,6 +43,19 @@ module Configs
         @replace_stat_change   = true
         @replace_perish        = true
       end
+
+      # Show any of the plugin animations?
+      # @return [Boolean]
+      def show_animation?
+        return $options.show_animation
+      end
+
+      def replace_effectiveness? = show_animation? && @replace_effectiveness
+      def replace_critical_hit?  = show_animation? && @replace_critical_hit
+      def replace_unaffected?    = show_animation? && @replace_unaffected
+      def replace_miss?          = show_animation? && @replace_miss
+      def replace_stat_change?   = show_animation? && @replace_stat_change
+      def replace_perish?        = show_animation? && @replace_perish
     end
   end
 

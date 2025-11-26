@@ -3,7 +3,7 @@ module Battle
     class PerishSong
       module ZVBattleMsgPerishSong
         def on_end_turn_event(logic, scene, battlers)
-          return super unless Configs.zv_battle_msg.replace_perish
+          return super unless Configs.zv_battle_msg.replace_perish?
           return if @pokemon.dead?
 
           scene.visual.zv_show_perish_animation(@pokemon, @counter - 1)

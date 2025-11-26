@@ -1,5 +1,7 @@
+# rubocop:disable Metrics/BlockLength
 proc do
-  raise 'This plugin requires PSDK 26.48 or newer' if PSDK_VERSION < 6704
+  # rubocop:enable Metrics/BlockLength
+  raise 'This plugin requires PSDK 26.50 or newer' if PSDK_VERSION < 6706
 
   check_class_names = proc do |scope, class_names|
     name_conflicts = class_names.find_all { |n| scope.const_defined?(n) }.map { |n| "#{scope}::#{n}" }

@@ -1,6 +1,6 @@
 module ZVBattleMsg
   # Handle the perish count animation in the battle scene
-  class PerishAnimation
+  class PerishAnimation < UI::SpriteStack
     # Subdirectory in audio/ or animation/ holding this animation's assets
     DIR_NAME = 'perish'
 
@@ -9,7 +9,7 @@ module ZVBattleMsg
     # @param target_sprite [BattleUI::PokemonSprite]
     # @param countdown [Integer]
     def initialize(viewport, scene, target_sprite, countdown)
-      @sprite_stack = UI::SpriteStack.new(viewport, default_cache: :animation)
+      super(viewport, default_cache: :animation)
       @scene = scene
       @target_sprite = target_sprite
       @countdown = countdown
@@ -18,43 +18,35 @@ module ZVBattleMsg
       @hand = create_sprite(hand_filename)
       @counter = create_sprite(counter_filename, *counter_dimensions, type: SpriteSheet)
       @counter.sx = countdown
+      self.opacity = 0
     end
 
-    # @return [Yuki::Animation::TimedAnimation]
+    # @return [Yuki::Animation::AnimationMixin]
     # @note This animation doesn't dispose
     def create_animation
       ya = Yuki::Animation
-      fade_in  = ->(sprite, duration: 0.1, opacity_end: 255) { ya.opacity_change(duration, sprite, 0, opacity_end) }
-      fade_out = ->(sprite, duration: 0.1, opacity_start: 255) { ya.opacity_change(duration, sprite, opacity_start, 0) }
+      fade_in  = ->(sprite, opacity_end: 255) { ya.opacity_change(0.1, sprite, 0, opacity_end) }
+      fade_out = ->(sprite, opacity_start: 255) { ya.opacity_change(0.1, sprite, opacity_start, 0) }
 
-      tx = @target_sprite.x
-      ty = @target_sprite.y
+      tx = @target_sprite.x + x_offset
+      ty = @target_sprite.y + y_offset
 
-      anim = ya.move_discreet(0, @sprite_stack, tx, ty, tx + x_offset, ty + y_offset)
-      tick_anim = ya.se_play(clock_se_filename)
-      anim.play_before(tick_anim)
-
-      # rubocop:disable Layout/MultilineMethodCallIndentation
-      count_anim = tick_anim
-        .parallel_add(fade_in.call(@clock))
-        .parallel_add(fade_in.call(@clock_face, opacity_end: 120))
-        .parallel_add(fade_in.call(@hand))
-        .play_before(ya.rotation(hand_duration, @hand, 0, 360))
-        .play_before(fade_out.call(@hand))
-        .parallel_add(ya.send_command_to(@counter, :opacity=, 255))
-      # rubocop:enable Layout/MultilineMethodCallIndentation
-
-      count_anim.parallel_add(ya.se_play(ball_se_filename)) if @countdown == 0
-      count_anim.play_before(ya.wait(0.4))
-                .play_before(fade_out.call(@counter))
-                .parallel_add(fade_out.call(@clock_face))
-                .parallel_add(fade_out.call(@clock))
-
-      return anim
-    end
-
-    def dispose
-      @sprite_stack.dispose
+      return ya.player(
+        ya.send_command_to(self, :x=, tx),
+        ya.send_command_to(self, :y=, ty),
+        ya.parallel(fade_in.call(@clock),
+                    fade_in.call(@clock_face, opacity_end: 120),
+                    fade_in.call(@hand),
+                    ya.se_play(clock_se_filename)),
+        ya.rotation(hand_duration, @hand, 0, 360),
+        ya.parallel(@countdown == 0 ? ya.se_play(bell_se_filename) : ya.wait(0)),
+                    ya.send_command_to(@hand, :opacity=, 0),
+                    ya.send_command_to(@counter, :opacity=, 255)),
+        ya.wait(0.4),
+        ya.parallel(fade_out.call(@counter),
+                    fade_out.call(@clock_face, opacity_start: 120),
+                    fade_out.call(@clock))
+      )
     end
 
     private
@@ -64,8 +56,7 @@ module ZVBattleMsg
     # @param type [Class] Class to use to generate the sprite
     # @return [Sprite]
     def create_sprite(filename, *args, type: Sprite)
-      sprite = @sprite_stack.add_sprite(0, -32, filename, *args, type: type)
-      sprite.opacity = 0
+      sprite = add_sprite(0, -32, filename, *args, type: type)
       sprite.set_origin(sprite.width / 2, sprite.height / 2)
       apply_3d_battle_settings(sprite)
       return sprite
@@ -103,10 +94,8 @@ module ZVBattleMsg
     def clock_face_filename = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock-perish-face')
     def hand_filename       = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock-hand')
     def counter_filename    = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock-countdown')
-
-    def clock_se_filename = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock-ticking-single')
-    def ball_se_filename  = File.join(ROOT_DIR_NAME, DIR_NAME, 'bell-tolling-single')
-
-    def counter_dimensions = [10, 1]
+    def clock_se_filename   = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock-ticking-single')
+    def bell_se_filename    = File.join(ROOT_DIR_NAME, DIR_NAME, 'bell-tolling-single')
+    def counter_dimensions  = [10, 1]
   end
 end
