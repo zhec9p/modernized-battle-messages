@@ -14,10 +14,10 @@ module ZVBattleMsg
       @target_sprite = target_sprite
       @countdown = countdown
       @clock = create_sprite(clock_filename)
-      @clock_face = create_sprite(clock_face_filename)
       @hand = create_sprite(hand_filename)
       @counter = create_sprite(counter_filename, *counter_dimensions, type: SpriteSheet)
-      @counter.sx = countdown
+      @counter.sx = countdown + 1
+      @counter.sy = 0
       self.opacity = 0
     end
 
@@ -25,31 +25,36 @@ module ZVBattleMsg
     # @note This animation doesn't dispose
     def create_animation
       ya = Yuki::Animation
-      fade_in  = ->(sprite, opacity_end: 255) { ya.opacity_change(0.1, sprite, 0, opacity_end) }
-      fade_out = ->(sprite, opacity_start: 255) { ya.opacity_change(0.1, sprite, opacity_start, 0) }
+      fade_in  = ->(*sprites) { sprites.map { |s| ya.opacity_change(0.1, s, 0, 255) } }
+      fade_out = ->(*sprites) { sprites.map { |s| ya.opacity_change(0.1, s, 255, 0) } }
 
       tx = @target_sprite.x + x_offset
       ty = @target_sprite.y + y_offset
 
       return ya.player(
-        ya.send_command_to(self, :x=, tx),
-        ya.send_command_to(self, :y=, ty),
-        ya.parallel(fade_in.call(@clock),
-                    fade_in.call(@clock_face, opacity_end: 120),
-                    fade_in.call(@hand),
+        ya.move_discreet(0, self, tx, ty, tx, ty),
+        ya.parallel(*fade_in.call(self),
                     ya.se_play(clock_se_filename)),
         ya.rotation(hand_duration, @hand, 0, 360),
-        ya.parallel(@countdown == 0 ? ya.se_play(bell_se_filename) : ya.wait(0),
-                    ya.send_command_to(@hand, :opacity=, 0),
-                    ya.send_command_to(@counter, :opacity=, 255)),
-        ya.wait(0.4),
-        ya.parallel(fade_out.call(@counter),
-                    fade_out.call(@clock_face, opacity_start: 120),
-                    fade_out.call(@clock))
+        ya.parallel(bell_animation,
+                    ya.send_command_to(@counter, :select, @countdown, 1),
+                    ya.send_command_to(@hand, :opacity=, 0)),
+        ya.wait(0.2),
+        ya.send_command_to(@counter, :sy=, 0),
+        ya.wait(0.2),
+        ya.parallel(*fade_out.call(@counter, @clock))
       )
     end
 
     private
+
+    # @return [Yuki::Animation::AnimationMixin]
+    def bell_animation
+      ya = Yuki::Animation
+      return ya.wait(0) if @countdown > 0
+
+      return ya.se_play(bell_se_filename)
+    end
 
     # @param filename [String]
     # @param args [Array] The arguments after the viewport argument of the sprite to create the sprite
@@ -91,11 +96,10 @@ module ZVBattleMsg
     end
 
     def clock_filename      = ZVBattleMsg.file_join(DIR_NAME, 'clock')
-    def clock_face_filename = ZVBattleMsg.file_join(DIR_NAME, 'clock-perish-face')
     def hand_filename       = ZVBattleMsg.file_join(DIR_NAME, 'clock-hand')
-    def counter_filename    = ZVBattleMsg.file_join(DIR_NAME, 'clock-countdown')
+    def counter_filename    = ZVBattleMsg.file_join(DIR_NAME, 'countdown')
     def clock_se_filename   = ZVBattleMsg.file_join(DIR_NAME, 'clock-ticking-single')
     def bell_se_filename    = ZVBattleMsg.file_join(DIR_NAME, 'bell-tolling-single')
-    def counter_dimensions  = [10, 1]
+    def counter_dimensions  = [10, 2]
   end
 end
