@@ -37,6 +37,7 @@ module Configs
       attr_writer :replace_perish
 
       def initialize
+        @dir_name              = 'zv-battle-messages'
         @csv_id                = 93_208
         @replace_effectiveness = true
         @replace_critical_hit  = true

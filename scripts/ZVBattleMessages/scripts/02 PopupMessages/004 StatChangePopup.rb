@@ -24,10 +24,10 @@ module ZVBattleMsg
       ty1, ty2 = ty2, ty1 unless stat_up?
 
       return ya.parallel(
-        ya.move_discreet(self.class.main_duration, self, tx, ty1, tx, ty2),
+        ya.move_discreet(main_duration, self, tx, ty1, tx, ty2),
         ya.player(
           ya.opacity_change(0.1, self, 0, 255),
-          ya.wait(self.class.main_duration),
+          ya.wait(main_duration),
           ya.opacity_change(0.1, self, 255, 0)
         )
       )
@@ -42,7 +42,7 @@ module ZVBattleMsg
     # Filename of the sprite to use in the popup message
     # @return [String]
     def popup_filename
-      return file_join(DIR_NAME, 'stat-change')
+      return ZVBattleMsg.file_join(DIR_NAME, 'stat-change')
     end
 
     # Message to display on the popup

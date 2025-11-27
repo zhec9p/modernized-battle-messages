@@ -5,21 +5,25 @@ module BattleUI
         return super(amount) unless Configs.zv_battle_msg.replace_stat_change? && stat && target
 
         ya = Yuki::Animation
+        out_of_reach = target&.effects&.has?(&:out_of_reach?)
+
+        # StatChangePopup must be instantiated after StatAnimation to ensure that
+        # the stat animation's particles don't obscure the popup.
+        aura  = UI::StatAnimation.new(viewport, amount, z, @bank) unless out_of_reach
         popup = ZVBattleMsg::StatChangePopup.new(viewport, @scene, self, stat, amount)
         anims = [
           ya.se_play(stat_se(amount)),
           ya.player(popup.create_animation, ya.send_command_to(popup, :dispose))
         ]
 
-        unless target&.effects&.has?(&:out_of_reach?)
-          sprite = UI::StatAnimation.new(viewport, amount, z, @bank)
-          sprite_duration = popup.main_duration + 0.2
-
+        unless out_of_reach
           anims << ya.player(
-            ya.move(0, sprite, x, y, x + sprite.x_offset, y + sprite.y_offset),
-            ya.scalar(sprite_duration, sprite, :animation_progression=, 0, 1),
-            a.send_command_to(sprite, :dispose)
+            ya.move(0, aura, x, y, x + aura.x_offset, y + aura.y_offset),
+            ya.scalar(popup.main_duration + 0.2, aura, :animation_progression=, 0, 1),
+            ya.send_command_to(aura, :dispose)
           )
+
+          popup.z = [popup.z, aura.z + 1].max
         end
 
         anim = ya.parallel(*anims)

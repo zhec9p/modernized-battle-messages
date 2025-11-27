@@ -35,6 +35,14 @@ proc do
         BattleMsgTemp
       ]
     )
+
+    check_singleton_methods.call(
+      ZVBattleMsg, %i[
+        home_language
+        translate_animation_filename
+        ZVBattleMsg.file_join
+      ]
+    )
   end
 
   check_instance_methods.call(
@@ -42,14 +50,6 @@ proc do
       zv_show_unaffected_animation
       zv_show_miss_animation
       zv_show_perish_animation
-    ]
-  )
-
-  check_singleton_methods.call(
-    ZVBattleMsg, %i[
-      home_language
-      translate_animation_filename
-      file_join
     ]
   )
 end.call

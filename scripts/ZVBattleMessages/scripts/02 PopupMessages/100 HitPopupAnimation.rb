@@ -23,6 +23,7 @@ module ZVBattleMsg
         )
       end
 
+      anims << ya.wait(0) if anims.empty?
       return ya.parallel(*anims)
     end
 

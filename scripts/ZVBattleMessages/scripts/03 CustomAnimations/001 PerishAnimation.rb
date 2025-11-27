@@ -90,12 +90,12 @@ module ZVBattleMsg
       return 0.5
     end
 
-    def clock_filename      = file_join(DIR_NAME, 'clock')
-    def clock_face_filename = file_join(DIR_NAME, 'clock-perish-face')
-    def hand_filename       = file_join(DIR_NAME, 'clock-hand')
-    def counter_filename    = file_join(DIR_NAME, 'clock-countdown')
-    def clock_se_filename   = file_join(DIR_NAME, 'clock-ticking-single')
-    def bell_se_filename    = file_join(DIR_NAME, 'bell-tolling-single')
+    def clock_filename      = ZVBattleMsg.file_join(DIR_NAME, 'clock')
+    def clock_face_filename = ZVBattleMsg.file_join(DIR_NAME, 'clock-perish-face')
+    def hand_filename       = ZVBattleMsg.file_join(DIR_NAME, 'clock-hand')
+    def counter_filename    = ZVBattleMsg.file_join(DIR_NAME, 'clock-countdown')
+    def clock_se_filename   = ZVBattleMsg.file_join(DIR_NAME, 'clock-ticking-single')
+    def bell_se_filename    = ZVBattleMsg.file_join(DIR_NAME, 'bell-tolling-single')
     def counter_dimensions  = [10, 1]
   end
 end
