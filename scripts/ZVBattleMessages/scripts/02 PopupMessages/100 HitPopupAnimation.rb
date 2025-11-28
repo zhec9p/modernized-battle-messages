@@ -19,7 +19,7 @@ module ZVBattleMsg
         next ya.player(
           ya.wait(time_between_popups * index),
           pu.create_animation,
-          ya.send_command_to(pu, :dispose)
+          ya.dispose_sprite(pu)
         )
       end
 

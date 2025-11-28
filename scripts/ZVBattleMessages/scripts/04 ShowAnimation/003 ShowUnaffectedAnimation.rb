@@ -6,7 +6,7 @@ module Battle
       ya = Yuki::Animation
       target_sprite = battler_sprite(target.bank, target.position)
       popup = ZVBattleMsg::UnaffectedPopup.new(viewport, @scene, target_sprite)
-      anim = ya.player(popup.create_animation, ya.send_command_to(popup, :dispose))
+      anim = ya.player(popup.create_animation, ya.dispose_sprite(popup))
       @animations << anim
       anim.start
       wait_for_animation
