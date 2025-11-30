@@ -21,7 +21,6 @@ module ZVBattleMsg
       @hour_hand     = create_sprite(hour_hand_filename, hand_position)
       @minute_hand   = create_sprite(minute_hand_filename, hand_position)
       @counter       = create_sprite(counter_filename, counter_position, *counter_dimensions, type: SpriteSheet)
-      @counter.sx    = old_count
       self.opacity   = 0
     end
 
@@ -36,6 +35,7 @@ module ZVBattleMsg
         ya.parallel(
           ya.player(
             ya.move_discreet(0, self, tx, ty, tx, ty),
+            ya.send_command_to(@counter, :sx=, @old_count),
             ya.opacity_change(0.1, self, 0, 255),
             hand_animation
           ),
@@ -43,8 +43,8 @@ module ZVBattleMsg
         ),
         ya.parallel(
           ya.player(
-            counter_change_animation,
-            ya.wait(counter_change_duration),
+            count_change_animation,
+            ya.wait(post_count_duration),
             ya.opacity_change(0.1, self, 255, 0)
           ),
           idle_animation(@new_count)
@@ -56,19 +56,19 @@ module ZVBattleMsg
 
     # Animation for the clock hands
     # @return [Yuki::Animation::AnimationMixin]
-    def hands_animation
+    def hand_animation
       ya = Yuki::Animation
 
       return ya.parallel(
         ya.rotation(hand_duration, @minute_hand, 0, 360 * (@old_count - @new_count)),
         ya.rotation(hand_duration, @hour_hand, @old_count * 30, @new_count * 30),
-        ya.se_play(count_se_filename)
+        ya.se_play(hand_se_filename)
       )
     end
 
     # Animation for changing to the new count
     # @return [Yuki::Animation::AnimationMixin]
-    def counter_change_animation
+    def count_change_animation
       ya = Yuki::Animation
       anims = [ya.send_command_to(@counter, :sx=, @new_count)]
       anims << ya.se_play(death_se_filename) if death?(@new_count)
@@ -77,7 +77,7 @@ module ZVBattleMsg
 
     # How long the animation lasts after the new count before disappearing
     # @return [Float]
-    def counter_change_duration
+    def post_count_duration
       duration = 0.4
       duration += 0.1 if death?(@new_count)
       return duration
@@ -143,6 +143,7 @@ module ZVBattleMsg
 
     def minute_hand_filename = ZVBattleMsg.file_join(DIR_NAME, 'minute-hand')
     def hour_hand_filename   = ZVBattleMsg.file_join(DIR_NAME, 'hour-hand')
+    def hand_se_filename     = ZVBattleMsg.file_join(DIR_NAME, 'clock-ticking-single')
     def hand_position        = [0, 0]
     def hand_duration        = 0.5
 
@@ -150,7 +151,6 @@ module ZVBattleMsg
     def counter_position   = [0, -32]
     def counter_dimensions = [5, 2]
 
-    def count_se_filename = ZVBattleMsg.file_join(DIR_NAME, 'clock-ticking-single')
     def death_se_filename = ZVBattleMsg.file_join(DIR_NAME, 'bell-tolling-single')
   end
 end
