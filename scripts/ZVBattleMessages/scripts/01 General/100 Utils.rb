@@ -19,6 +19,18 @@ module ZVBattleMsg
   # @param args [Array<String>]
   # @return [String]
   def file_join(*args)
-    return File.join(Configs.zv_battle_msg.dir_name, *args)
+    return File.join(MAIN_DIR_NAME, *args)
   end
+
+  # @return [Boolean]
+  def show_any_animation?
+    return $options.show_animation
+  end
+
+  def replace_effectiveness? = show_any_animation? && REPLACE_EFFECTIVENESS
+  def replace_critical_hit?  = show_any_animation? && REPLACE_CRITICAL_HIT
+  def replace_unaffected?    = show_any_animation? && REPLACE_UNAFFECTED
+  def replace_miss?          = show_any_animation? && REPLACE_MISS
+  def replace_stat_change?   = show_any_animation? && REPLACE_STAT_CHANGE
+  def replace_perish?        = show_any_animation? && REPLACE_PERISH
 end

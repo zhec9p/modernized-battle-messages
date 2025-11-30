@@ -2,21 +2,13 @@ module ZVBattleMsg
   # Base class for creating an animation that displays a short popup message on a battler.
   # Tested with 96px x 17px popup message images on 96px x 96px battler sprites in 2D battle mode.
   class PopupMessage < UI::SpriteStack
-    # Subdirectory in audio/zv-battle-messages or animation/zv-battle-messages holding popup messages' assets
+    # Subdirectory in animation/zv-battle-messages holding popup messages' assets
     DIR_NAME = 'popup-messages'
 
     # Offsets for most popup messages relative to a battler's sprite.
     #   OFFSETS[0] => Player battler
     #   OFFSETS[1] => Enemey battler
     OFFSETS = [[0, -42], [0, -42]]
-
-    # Dimensions of the popup's text surface.
-    # Unused if the text_content method isn't implemented.
-    TEXT_DIMENSIONS = [96, 8]
-
-    # Center alignment for text.
-    # Unused if the text_content method isn't implemented
-    TEXT_ALIGNMENT  = 1
 
     # @param viewport [Viewport]
     # @param scene [Battle::Scene]
@@ -39,7 +31,6 @@ module ZVBattleMsg
 
     private
 
-    # Sprite for the popup message
     # @return [Sprite]
     def create_sprite
       filename = ZVBattleMsg.translate_animation_filename(popup_filename)
@@ -48,13 +39,12 @@ module ZVBattleMsg
       return sprite
     end
 
-    # Text for the popup message
     # @return [Text]
     def create_text
       return unless respond_to?(:text_content, true)
 
       return with_font(font_id) do
-        add_text(*text_position, *TEXT_DIMENSIONS, text_content, TEXT_ALIGNMENT, color: text_color_id)
+        add_text(*text_position, *text_dimensions, text_content, text_alignment, color: color_id)
       end
     end
 
@@ -64,7 +54,6 @@ module ZVBattleMsg
       raise 'This method must be implemented in the subclass'
     end
 
-    # X offset for the animation
     # @return [Integer]
     def x_offset
       offset = OFFSETS[@target_sprite.bank][0]
@@ -72,7 +61,6 @@ module ZVBattleMsg
       return offset
     end
 
-    # Y offset for the animation
     # @return [Integer]
     def y_offset
       offset = OFFSETS[@target_sprite.bank][1]
@@ -80,19 +68,24 @@ module ZVBattleMsg
       return offset
     end
 
-    # Position of the text relative to the popup's sprite stack
     # @return [Array<Integer>]
     # @note Unused if the text_content method isn't implemented
     def text_position
       raise 'This method must be implemented in the subclass if `text_content` is implemented'
     end
 
-    # Text color ID
+    # @return [Array<Integer>]
+    # @note Unused if the text_content method isn't implemented
+    def text_dimensions = [96, 8]
+
     # @return [Integer]
     # @note Unused if the text_content method isn't implemented
-    def text_color_id = 9
+    def text_alignment = 1
 
-    # Font ID
+    # @return [Integer]
+    # @note Unused if the text_content method isn't implemented
+    def color_id = 9
+
     # @return [Integer]
     # @note Unused if the text_content method isn't implemented
     def font_id = 20
@@ -107,7 +100,7 @@ module ZVBattleMsg
       tx = @target_sprite.x + x_offset
       ty = @target_sprite.y + y_offset
 
-      anim = ya.parallel(
+      return ya.parallel(
         ya.move_discreet(main_duration + 0.1, self, tx, ty, tx, ty + y_displacement),
         ya.player(
           ya.opacity_change(0.1, self, 0, 255),
@@ -115,18 +108,11 @@ module ZVBattleMsg
           ya.opacity_change(0.1, self, 255, 0)
         )
       )
-
-      return anim
     end
 
     private
 
-    # Duration of the main part of the animation
-    # @return [Float]
-    def main_duration = 0.7
-
-    # Y-axis displacement of the popup message in the animation
-    # @return [Integer]
+    def main_duration  = 0.7
     def y_displacement = -20
   end
 end

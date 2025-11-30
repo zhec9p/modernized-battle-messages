@@ -2,7 +2,7 @@ module BattleUI
   class PokemonSprite
     module ZVBattleMsgChangeStat
       def change_stat_animation(amount, stat = nil, target = nil)
-        return super(amount) unless Configs.zv_battle_msg.replace_stat_change? && stat && target
+        return super(amount) unless ZVBattleMsg.replace_stat_change? && stat && target
 
         ya = Yuki::Animation
         out_of_reach = target&.effects&.has?(&:out_of_reach?)
@@ -39,7 +39,7 @@ module Battle
   class Visual
     module ZVBattleMsgShowStat
       def show_stat_animation(target, amount, stat = nil)
-        return super(target, amount) unless Configs.zv_battle_msg.replace_stat_change?
+        return super(target, amount) unless ZVBattleMsg.replace_stat_change?
 
         wait_for_animation
         target_sprite = battler_sprite(target.bank, target.position)

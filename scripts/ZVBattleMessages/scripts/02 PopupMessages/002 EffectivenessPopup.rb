@@ -8,7 +8,7 @@ module ZVBattleMsg
     # Filename of the sprite to use in the popup message
     # @return [String]
     def popup_filename
-      return ZVBattleMsg.file_join(DIR_NAME, 'super-effective')
+      return ZVBattleMsg.file_join(PopupMessage::DIR_NAME, 'super-effective')
     end
   end
 
@@ -21,7 +21,7 @@ module ZVBattleMsg
     # Filename of the sprite to use in the popup message
     # @return [String]
     def popup_filename
-      return ZVBattleMsg.file_join(DIR_NAME, 'not-very-effective')
+      return ZVBattleMsg.file_join(PopupMessage::DIR_NAME, 'not-very-effective')
     end
   end
 
@@ -37,12 +37,9 @@ module ZVBattleMsg
 
       tx = @target_sprite.x + x_offset
       ty = @target_sprite.y + y_offset
-      anims = [fade_in.call, waiting.call, fade_out.call]
-      anims += anims.clone
 
       return ya.player(
-        ya.send_command_to(self, :x=, tx),
-        ya.send_command_to(self, :y=, ty),
+        ya.move_discreet(0, self, tx, ty, tx, ty),
         fade_in.call,
         waiting.call,
         fade_out.call,
@@ -57,7 +54,7 @@ module ZVBattleMsg
     # Filename of the sprite to use in the popup message
     # @return [String]
     def popup_filename
-      return ZVBattleMsg.file_join(DIR_NAME, 'no-effect')
+      return ZVBattleMsg.file_join(PopupMessage::DIR_NAME, 'no-effect')
     end
 
     def fade_in_duration  = 0.125

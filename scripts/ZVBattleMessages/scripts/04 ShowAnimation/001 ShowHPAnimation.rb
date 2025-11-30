@@ -4,7 +4,7 @@ module Battle
       def create_hp_animation_handler(target, hp, effectiveness, *_args, **_kwargs)
         handler = super
         replace = %i[replace_effectiveness? replace_critical_hit?]
-        return handler if replace.none? { |r| Configs.zv_battle_msg.send(r) }
+        return handler if replace.none? { |r| ZVBattleMsg.send(r) }
 
         # Must shift this array regardless whether it's direct damage
         critical_hit = @scene.logic.zv_battle_msg_internal.critical_hits.last&.shift

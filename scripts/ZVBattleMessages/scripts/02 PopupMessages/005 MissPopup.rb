@@ -8,7 +8,7 @@ module ZVBattleMsg
     def create_animation
       ya = Yuki::Animation
       miss_anim = ya.user_bank_relative_animation([friend_animation, foe_animation])
-      miss_anim.resolver = { user: @target_sprite }.method(:[])
+      miss_anim.resolver = { user: @target_sprite }
       return ya.parallel(super, miss_anim)
     end
 
@@ -50,11 +50,7 @@ module ZVBattleMsg
       )
     end
 
-    # @return [Array<Integer, Integer>]
-    def dodge_distances
-      return [25, 0]
-    end
-
+    def dodge_distances        = [25, 0]
     def dodge_outward_duration = 0.075
     def dodge_wait_duration    = 0.4
     def dodge_inward_duration  = 0.2

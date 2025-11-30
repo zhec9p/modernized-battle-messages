@@ -7,7 +7,7 @@ module ZVBattleMsg
     # Filename of the sprite to use in the popup message
     # @return [String]
     def popup_filename
-      return ZVBattleMsg.file_join(DIR_NAME, 'critical-hit')
+      return ZVBattleMsg.file_join(PopupMessage::DIR_NAME, 'critical-hit')
     end
   end
 end

@@ -1,6 +1,6 @@
 module Battle
   class Visual
-    # Show an animation for a battler avoiding an attack
+    # Show animation for a battler avoiding an attack
     # @param target [PFM::PokemonBattler]
     # @param countdown [Integer] Perish count
     def zv_show_miss_animation(target)

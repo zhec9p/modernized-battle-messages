@@ -29,7 +29,6 @@ module ZVBattleMsg
 
     private
 
-    # Create all relevant popup messages for the hit
     # @param target [PFM::PokemonBattler]
     # @param hp [Integer]
     # @param effectiveness [Float, nil]
@@ -45,12 +44,11 @@ module ZVBattleMsg
       return popups
     end
 
-    # Create a popup message about the effectiveness of a hit
     # @param target_sprite [BattleUI::PokemonSprite]
     # @poram effectiveness [Float, nil]
     # @return [ZVBattleMsg::PopupMessage, nil]
     def hit_effectiveness_popup(target_sprite, effectiveness)
-      return unless Configs.zv_battle_msg.replace_effectiveness? && effectiveness
+      return unless ZVBattleMsg.replace_effectiveness? && effectiveness
 
       viewport = @scene.visual.viewport
       return SuperEffectivePopup.new(viewport, @scene, target_sprite) if effectiveness > 1
@@ -59,12 +57,11 @@ module ZVBattleMsg
       return nil
     end
 
-    # Create a popup message about whether the hit is critical
     # @param target_sprite [BattleUI::PokemonSprite]
     # @poram critical [Boolean, nil]
     # @return [ZVBattleMsg::PopupMessage, nil]
     def critical_hit_popup(target_sprite, critical)
-      return unless Configs.zv_battle_msg.replace_critical_hit? && critical
+      return unless ZVBattleMsg.replace_critical_hit? && critical
 
       viewport = @scene.visual.viewport
       return CriticalHitPopup.new(viewport, @scene, target_sprite)
