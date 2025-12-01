@@ -17,7 +17,6 @@ module ZVBattleMsg
       @target_sprite = target_sprite
       @old_count     = old_count
       @new_count     = new_count
-      @clock         = create_sprite(clock_filename, clock_position)
       @hour_hand     = create_sprite(hour_hand_filename, hand_position)
       @minute_hand   = create_sprite(minute_hand_filename, hand_position)
       @counter       = create_sprite(counter_filename, counter_position, *counter_dimensions, type: SpriteSheet)
@@ -137,9 +136,6 @@ module ZVBattleMsg
 
     def x_offset = 0
     def y_offset = -32
-
-    def clock_filename = ZVBattleMsg.file_join(DIR_NAME, 'clock')
-    def clock_position = [0, 0]
 
     def minute_hand_filename = ZVBattleMsg.file_join(DIR_NAME, 'minute-hand')
     def hour_hand_filename   = ZVBattleMsg.file_join(DIR_NAME, 'hour-hand')
