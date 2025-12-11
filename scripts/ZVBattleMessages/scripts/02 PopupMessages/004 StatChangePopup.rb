@@ -42,13 +42,13 @@ module ZVBattleMsg
     # Filename of the sprite to use in the popup message
     # @return [String]
     def popup_filename
-      return ZVBattleMsg.file_join(DIR_NAME, 'stat-change')
+      return Configs.zv_battle_msg.filepath('stat-change')
     end
 
     # Message to display on the popup
     # @return [String, nil]
     def text_content
-      stat_name = parse_text(ZVBattleMsg::CSV_ID, STAT_TEXT_IDS[@stat])
+      stat_name = parse_text(Configs.zv_battle_msg.csv_id, STAT_TEXT_IDS[@stat])
       stage_text = @stages.to_s
       stage_text.prepend('+') if stat_up?
       return "#{stat_name} #{stage_text}"

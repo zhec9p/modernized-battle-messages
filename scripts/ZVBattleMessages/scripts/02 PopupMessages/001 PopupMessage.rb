@@ -1,10 +1,6 @@
 module ZVBattleMsg
-  # Base class for creating an animation that displays a short popup message on a battler.
-  # Tested with 96px x 17px popup message images on 96px x 96px battler sprites in 2D battle mode.
+  # Base class for creating an animation that displays a short popup message on a battler
   class PopupMessage < UI::SpriteStack
-    # Subdirectory in animation/zv-battle-messages holding popup messages' assets
-    DIR_NAME = 'popup-messages'
-
     # Offsets for most popup messages relative to a battler's sprite.
     #   OFFSETS[0] => Player battler
     #   OFFSETS[1] => Enemey battler
@@ -112,7 +108,7 @@ module ZVBattleMsg
 
     private
 
-    def main_duration  = 0.7
+    def main_duration = 0.7
     def y_displacement = -20
   end
 end

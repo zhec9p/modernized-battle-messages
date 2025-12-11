@@ -48,7 +48,7 @@ module ZVBattleMsg
     # @poram effectiveness [Float, nil]
     # @return [ZVBattleMsg::PopupMessage, nil]
     def hit_effectiveness_popup(target_sprite, effectiveness)
-      return unless ZVBattleMsg.replace_effectiveness? && effectiveness
+      return unless Configs.zv_battle_msg.replace_effectiveness? && effectiveness
 
       viewport = @scene.visual.viewport
       return SuperEffectivePopup.new(viewport, @scene, target_sprite) if effectiveness > 1
@@ -61,7 +61,7 @@ module ZVBattleMsg
     # @poram critical [Boolean, nil]
     # @return [ZVBattleMsg::PopupMessage, nil]
     def critical_hit_popup(target_sprite, critical)
-      return unless ZVBattleMsg.replace_critical_hit? && critical
+      return unless Configs.zv_battle_msg.replace_critical_hit? && critical
 
       viewport = @scene.visual.viewport
       return CriticalHitPopup.new(viewport, @scene, target_sprite)
