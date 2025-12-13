@@ -1,8 +1,6 @@
 module ZVBattleMsg
   # Handle the perish count animation in the battle scene
   class PerishAnimation < UI::SpriteStack
-    MAX_TARGET_HEIGHT = 48
-
     # @param viewport [Viewport]
     # @param scene [Battle::Scene]
     # @param target_sprite [BattleUI::PokemonSprite]
@@ -34,37 +32,19 @@ module ZVBattleMsg
 
     # Creates all the sprites needed for the animation
     def create_sprites
-      @graduations = Array.new(max_graduations) do
-        g = create_sprite(graduation_filename, graduation_position)
-        g.set_origin(g.width / 2, -MAX_TARGET_HEIGHT + g.height)
-        next g
-      end
-
+      @graduations = create_sprite(graduation_filename, graduation_position)
       @hour_hand   = create_sprite(hour_hand_filename, hand_position)
       @minute_hand = create_sprite(minute_hand_filename, hand_position)
       @number      = create_sprite(number_filename, number_position, *number_dimensions, type: SpriteSheet)
-
-      @hour_hand.set_origin(@hour_hand.width / 2, @hour_hand.height / 2)
-      @minute_hand.set_origin(@minute_hand.width / 2, @minute_hand.height / 2)
-      @number.set_origin(@number.width / 2, @number.height / 2)
     end
 
     # @return [Yuki::Animation::AnimationMixin]
     def setup_animation
       ya = Yuki::Animation
-
       tx = @target_sprite.x + x_offset
       ty = @target_sprite.y + y_offset
 
-      graduation_adjustments = @graduations.map.with_index do |g, i|
-        angle = 360.0 * i.to_f / max_graduations.to_f
-        next ya.rotation(0, g, angle, angle)
-      end
-
-      return ya.parallel(
-        *graduation_adjustments,
-        ya.move_discreet(0, self, tx, ty, tx, ty)
-      )
+      return ya.move_discreet(0, self, tx, ty, tx, ty)
     end
 
     # Animation played during the old count
@@ -123,8 +103,8 @@ module ZVBattleMsg
       minute_angle = ->(count) { -count.to_f * 360.0 / max_count.to_f }
       min0 = minute_angle.call(@old_count)
       min1 = minute_angle.call(@new_count)
-      hr0 = min0 / max_graduations.to_f
-      hr1 = min1 / max_graduations.to_f
+      hr0 = min0 / 12.0
+      hr1 = min1 / 12.0
 
       return ya.parallel(
         ya.rotation(hand_duration, @minute_hand, min0, min1),
@@ -150,7 +130,7 @@ module ZVBattleMsg
       ya = Yuki::Animation
 
       return ya.parallel(
-        *@graduations.map { |g| ya.opacity_change(0.1, g, 255, 0) },
+        ya.opacity_change(0.1, @graduations, 255, 0),
         ya.opacity_change(0.1, @hour_hand, 255, 0),
         ya.opacity_change(0.1, @minute_hand, 255, 0),
       )
@@ -177,6 +157,7 @@ module ZVBattleMsg
     # @return [Sprite]
     def create_sprite(filename, position, *args, type: Sprite)
       sprite = add_sprite(*position, filename, *args, type: type)
+      sprite.set_origin(sprite.width / 2, sprite.height / 2)
       apply_3d_battle_settings(sprite)
       return sprite
     end
