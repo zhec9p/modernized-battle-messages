@@ -22,7 +22,7 @@ module ZVBattleMsg
       ya = Yuki::Animation
 
       return ya.player(
-        setup_animation,
+        *setup_animations,
         old_count_animation,
         new_count_animation
       )
@@ -33,18 +33,21 @@ module ZVBattleMsg
     # Creates all the sprites needed for the animation
     def create_sprites
       @graduations = create_sprite(graduation_filename, graduation_position)
-      @hour_hand   = create_sprite(hour_hand_filename, hand_position)
       @minute_hand = create_sprite(minute_hand_filename, hand_position)
+      @hour_hand   = create_sprite(hour_hand_filename, hand_position)
       @number      = create_sprite(number_filename, number_position, *number_dimensions, type: SpriteSheet)
     end
 
-    # @return [Yuki::Animation::AnimationMixin]
-    def setup_animation
+    # @return [Array<Yuki::Animation::AnimationMixin>]
+    def setup_animations
       ya = Yuki::Animation
       tx = @target_sprite.x + x_offset
       ty = @target_sprite.y + y_offset
 
-      return ya.move_discreet(0, self, tx, ty, tx, ty)
+      return [
+        ya.move_discreet(0, self, tx, ty, tx, ty),
+        ya.send_command_to(@number, :sx=, @old_count)
+      ]
     end
 
     # Animation played during the old count
@@ -54,7 +57,6 @@ module ZVBattleMsg
 
       return ya.parallel(
         ya.player(
-          ya.send_command_to(@number, :sx=, @old_count),
           ya.opacity_change(0.1, self, 0, 255),
           hand_animation
         ),
@@ -70,8 +72,8 @@ module ZVBattleMsg
       return ya.parallel(
         ya.player(
           number_change_animation(@new_count),
-          clock_fade_animation,
-          ya.wait(0.5),
+          clock_hide_animation,
+          ya.wait(number_alone_duration),
           ya.opacity_change(0.1, @number, 255, 0)
         ),
         idle_animation(@new_count)
@@ -126,7 +128,7 @@ module ZVBattleMsg
     end
 
     # @return [Yuki::Animation::AnimationMixin]
-    def clock_fade_animation
+    def clock_hide_animation
       ya = Yuki::Animation
 
       return ya.parallel(
@@ -136,14 +138,14 @@ module ZVBattleMsg
       )
     end
 
-    # Is the count a low number?
+    # Is the perish count a low number?
     # @param count [Integer]
     # @return [Boolean]
     def peril?(count)
       return count <= 1 && !death?(count)
     end
 
-    # Is the count zero?
+    # Is the perish count zero?
     # @param count [Integer]
     # @return [Boolean]
     def death?(count)
@@ -171,15 +173,16 @@ module ZVBattleMsg
       sprite.shader.set_float_uniform('z', @target_sprite.shader_z_position)
     end
 
-    def x_offset             = 0
-    def y_offset             = -48
-    def graduation_position  = [0, 0]
-    def hand_position        = [0, 0]
-    def hand_duration        = 0.5
-    def max_count            = 4
-    def max_graduations      = 12
-    def number_position      = [0, 0]
-    def number_dimensions    = [max_count + 1, 2]
+    def x_offset              = 0
+    def y_offset              = -48
+    def graduation_position   = [0, 0]
+    def hand_position         = [0, 0]
+    def hand_duration         = 0.5
+    def max_count             = 4
+    def max_graduations       = 12
+    def number_position       = [0, 0]
+    def number_dimensions     = [max_count + 1, 2]
+    def number_alone_duration = 0.4
 
     def graduation_filename  = Configs.zv_battle_msg.filepath('perish-graduation')
     def hour_hand_filename   = Configs.zv_battle_msg.filepath('perish-hour-hand')
