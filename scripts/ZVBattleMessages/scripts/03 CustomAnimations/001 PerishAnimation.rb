@@ -175,7 +175,7 @@ module ZVBattleMsg
 
     def x_offset              = 0
     def y_offset              = -48
-    def graduation_position   = [0, 0]
+    def graduation_position   = [1, 1]
     def hand_position         = [0, 0]
     def hand_duration         = 0.5
     def max_count             = 4
