@@ -8,11 +8,11 @@ module Configs
                   :replace_stat_change,
                   :replace_perish
 
-      # Directory name for this plugin's assets in the following paths:
-      # - graphics/animations/
-      # - audio/se/
+      # Prefix name for this plugin's assets, used in the following ways:
+      # - graphics/animations/$PREFIX/* (Here, prefix is the subfolder name)
+      # - audio/se/$PREFIX-* (Here, prefix is the prefix of the filenames, followed by '-')
       # @return [String]
-      attr_accessor :dir_name
+      attr_accessor :prefix
 
       # ID of this plugin's CSV file
       # @return [Integer]
@@ -57,12 +57,18 @@ module Configs
 
       # @param filename [String]
       # @return [String]
-      def filepath(filename)
-        File.join(dir_name, filename)
+      def animation_path(filename)
+        return File.join(prefix, filename)
+      end
+
+      # @param filename [String]
+      # @return [String]
+      def se_path(filename)
+        return "#{prefix}-#{filename}"
       end
 
       def initialize
-        self.dir_name              = 'zv-battle-messages'
+        self.prefix                = 'zv-battle-messages'
         self.csv_id                = 93_208
         self.replace_effectiveness = true
         self.replace_critical_hit  = true

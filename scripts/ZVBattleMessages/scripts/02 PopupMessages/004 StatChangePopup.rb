@@ -42,7 +42,7 @@ module ZVBattleMsg
     # Filename of the sprite to use in the popup message
     # @return [String]
     def popup_filename
-      return Configs.zv_battle_msg.filepath('stat-change')
+      return Configs.zv_battle_msg.animation_path('stat-change')
     end
 
     # Message to display on the popup
