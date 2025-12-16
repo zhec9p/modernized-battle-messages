@@ -27,7 +27,7 @@ The following settings are available in `Data/configs/plugins/zv_battle_msg_conf
 | Key | Accepted Values | Default | Description |
 | -- | -- | -- | -- |
 | **`csv_id`** | 0 ≤ n ≤ 99999 | 93208 | ID of this plugin's CSV file. |
-| **`dir_name`** | String | "zv_battle_message" | Directory name for assets in the graphics/animations/ and audio/se/ paths.
+| **`dir_name`** | String | "zv_battle_message" | Directory name for assets in the `graphics/animations/` and `audio/se/` paths.
 | **`replace_effectiveness`** | `true`, `false` | `true` | Replaces the message displayed for super-effective and not-very-effective hits with a corresponding popup animation. |
 | **`replace_critical_hit`** | `true`, `false` | `true` | Replaces the message displayed for a critical hit with a popup animation. |
 | **`replace_unaffected`** | `true`, `false` | `true` | Replaces the message displayed when a move doesn't affect a battler with a popup and battler sprite animation. |
