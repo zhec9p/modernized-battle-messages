@@ -8,7 +8,7 @@ module Configs
                   :replace_stat_change,
                   :replace_perish
 
-      # Directory name for assets in the following paths:
+      # Directory name for this plugin's assets in the following paths:
       # - graphics/animations/
       # - audio/se/
       # @return [String]
