@@ -2,7 +2,7 @@ module Battle
   class Move
     module ZVBattleMsgProcedure
       def efficent_message(effectiveness, target)
-        return super unless Configs.zv_battle_msg.replace_effectiveness?
+        return super unless Configs.zv_battle_msg.replace_effectiveness
 
         if effectiveness > 1
           scene.zv_log_battle_message(parse_text_with_pokemon(19, 6, target))
@@ -12,7 +12,7 @@ module Battle
       end
 
       def hit_criticality_message(actual_targets, target)
-        return super unless Configs.zv_battle_msg.replace_critical_hit?
+        return super unless Configs.zv_battle_msg.replace_critical_hit
         return unless critical_hit?
 
         message = actual_targets.size == 1 ? parse_text(18, 84) : parse_text_with_pokemon(19, 384, target)
@@ -22,7 +22,7 @@ module Battle
       private
 
       def accuracy_immunity_test(user, targets)
-        return super unless Configs.zv_battle_msg.replace_unaffected?
+        return super unless Configs.zv_battle_msg.replace_unaffected
 
         return targets.select do |target|
           if target_immune?(user, target)
@@ -38,7 +38,7 @@ module Battle
       end
 
       def proceed_move_accuracy(user, targets)
-        return super unless Configs.zv_battle_msg.replace_miss?
+        return super unless Configs.zv_battle_msg.replace_miss
 
         if bypass_accuracy?(user, targets)
           log_data('# proceed_move_accuracy: bypassed')
