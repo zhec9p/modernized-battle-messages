@@ -4,36 +4,11 @@
 - [Overview](#overview)
 - [Installation](#installation)
 - [Dependencies](#dependencies)
+- [Settings](#settings)
 - [Credits](#credits)
 
 ## Overview
 Do you find pressing through "It's super effective!" and other messages of its ilk to be tedious? This plugin replaces some of them with succinct animations to make battles feel snappier and less of a button masher.
-
-The following settings are available in `Data/configs/plugins/zv_battle_msg_config.json` from your project's root folder.
-
-```json
-{
-  "csv_id": 93208,
-  "prefix": "zv-battle-messages",
-  "replace_effectiveness": true,
-  "replace_critical_hit": true,
-  "replace_unaffected": true,
-  "replace_miss": true,
-  "replace_stat_change": true,
-  "replace_perish": true
-}
-```
-
-| Key | Accepted Values | Default | Description |
-| -- | -- | -- | -- |
-| **`csv_id`** | 0 ≤ n ≤ 99999 | 93208 | ID of this plugin's CSV file. |
-| **`prefix`** | String | "zv-battle-messages" | Subfolder name for graphical animation assets. For example, `graphics/animations/zv-battle-messages/`.<br/><br/> Filename prefix for audio SE files, followed by a `-` character. For example, `audio/se/zv-battle-messages-*.ogg`.</li></ul> |
-| **`replace_effectiveness`** | `true`, `false` | `true` | Replaces the message displayed for super-effective and not-very-effective hits with a corresponding popup animation. |
-| **`replace_critical_hit`** | `true`, `false` | `true` | Replaces the message displayed for a critical hit with a popup animation. |
-| **`replace_unaffected`** | `true`, `false` | `true` | Replaces the message displayed when a move doesn't affect a battler with a popup and battler sprite animation. |
-| **`replace_stat_change`** | `true`, `false` | `true` | Replaces the message displayed when a battler's stat stage changes with a popup animation. This also speeds up the vanilla stat change animation, which the popup will overlap with. |
-| **`replace_miss`** | `true`, `false` | `true` | Replaces the message displayed when an attack misses with a popup and battler sprite animation. |
-| **`replace_perish`** | `true`, `false` | `true` | Replaces the message displayed for a battler's perish count with a custom animation. |
 
 ## Installation
 To install:
@@ -53,6 +28,33 @@ To uninstall:
 
 ## Dependencies
 - PSDK 26.50 or newer
+
+## Settings
+The following settings are available in the `Data/configs/plugins/zv_battle_msg_config.json` file.
+
+```json
+{
+  "csv_id": 93208,
+  "prefix": "zv-battle-messages",
+  "replace_effectiveness": true,
+  "replace_critical_hit": true,
+  "replace_unaffected": true,
+  "replace_miss": true,
+  "replace_stat_change": true,
+  "replace_perish": true
+}
+```
+
+| Key | Accepted Values | Default Value | Description |
+| -- | -- | -- | -- |
+| **`csv_id`** | 0 ≤ n ≤ 99999 | 93208 | ID of this plugin's CSV file. |
+| **`prefix`** | String | "zv-battle-messages" | Subfolder name for graphical animation assets. For example, if `prefix` is set to `"zv-battle-messages"`, then the graphics assets must be in `graphics/animations/zv-battle-messages/`.<br/><br/> Filename prefix for audio SE files, followed by a `-` character. For example, if `prefix` is set to `"zv-battle-messages"`, then the audio SE assets must be named `zv-battle-messages-*.ogg` in `audio/se/` (where `*` is the rest of the filename). |
+| **`replace_effectiveness`** | `true`, `false` | `true` | Replaces the message displayed for super-effective and not-very-effective hits with a corresponding popup animation. |
+| **`replace_critical_hit`** | `true`, `false` | `true` | Replaces the message displayed for a critical hit with a popup animation. |
+| **`replace_unaffected`** | `true`, `false` | `true` | Replaces the message displayed when a move doesn't affect a battler with a popup and battler sprite animation. |
+| **`replace_stat_change`** | `true`, `false` | `true` | Replaces the message displayed when a battler's stat stage changes with a popup animation. This also speeds up the vanilla stat change animation, which the popup will overlap with. |
+| **`replace_miss`** | `true`, `false` | `true` | Replaces the message displayed when an attack misses with a popup and battler sprite animation. |
+| **`replace_perish`** | `true`, `false` | `true` | Replaces the message displayed for a battler's perish count with a custom animation. |
 
 ## Credits
 #### Plugin Creator
