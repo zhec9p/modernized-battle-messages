@@ -74,6 +74,7 @@ module Configs
 
       private
 
+      # Show any of this plugin's animations?
       # @param ignore_option [Boolean] Disregard the game setting for showing battle animations?
       # @return [Boolean]
       def show_any_animation?(ignore_option: false)
@@ -85,23 +86,4 @@ module Configs
   # @!method self.zv_battle_msg
   # @return [Configs::Project::ZVBattleMsg]
   register(:zv_battle_msg, File.join('plugins', 'zv_battle_msg_config'), :json, false, Project::ZVBattleMsg)
-end
-
-module PSDKEditor
-  def convert_zv_battle_msg_settings
-    config = Configs.zv_battle_msg
-    data = {
-      klass: 'Configs::Project::ZVBattleMsg',
-      dir_name: config.dir_name,
-      csv_id: config.csv_id,
-      replace_effectiveness: config.replace_effectiveness?(ignore_option: true),
-      replace_critical_hit: config.replace_critical_hit?(ignore_option: true),
-      replace_unaffected: config.replace_unaffected?(ignore_option: true),
-      replace_miss: config.replace_miss?(ignore_option: true),
-      replace_stat_change: config.replace_stat_change?(ignore_option: true),
-      replace_perish: config.replace_perish?(ignore_option: true)
-    }
-
-    File.write(File.join(ROOT_CONFIGS, 'plugins', 'zv_battle_msg_config.json'), JSON.pretty_generate(data))
-  end
 end
