@@ -1,77 +1,169 @@
 module ZVBattleMsg
   # Handle the perish count animation in the battle scene
-  class PerishAnimation
-    # Subdirectory in audio/ or animation/ holding this animation's assets
-    DIR_NAME = 'perish'
-
+  class PerishAnimation < UI::SpriteStack
     # @param viewport [Viewport]
     # @param scene [Battle::Scene]
     # @param target_sprite [BattleUI::PokemonSprite]
-    # @param countdown [Integer]
-    def initialize(viewport, scene, target_sprite, countdown)
-      @sprite_stack = UI::SpriteStack.new(viewport, default_cache: :animation)
-      @scene = scene
+    # @param old_count [Integer]
+    # @param new_count [Integer]
+    def initialize(viewport, scene, target_sprite, old_count, new_count)
+      super(viewport, default_cache: :animation)
+      @scene         = scene
       @target_sprite = target_sprite
-      @countdown = countdown
-      @clock = create_sprite(clock_filename)
-      @clock_face = create_sprite(clock_face_filename)
-      @hand = create_sprite(hand_filename)
-      @counter = create_sprite(counter_filename, *counter_dimensions, type: SpriteSheet)
-      @counter.sx = countdown
+      @old_count     = old_count
+      @new_count     = new_count
+      create_sprites
+      self.opacity = 0
     end
 
-    # @return [Yuki::Animation::TimedAnimation]
+    # @return [Yuki::Animation::AnimationMixin]
     # @note This animation doesn't dispose
     def create_animation
       ya = Yuki::Animation
-      fade_in  = ->(sprite, duration: 0.1, opacity_end: 255) { ya.opacity_change(duration, sprite, 0, opacity_end) }
-      fade_out = ->(sprite, duration: 0.1, opacity_start: 255) { ya.opacity_change(duration, sprite, opacity_start, 0) }
 
-      tx = @target_sprite.x
-      ty = @target_sprite.y
-
-      anim = ya.move_discreet(0, @sprite_stack, tx, ty, tx + x_offset, ty + y_offset)
-      tick_anim = ya.se_play(clock_se_filename)
-      anim.play_before(tick_anim)
-
-      # rubocop:disable Layout/MultilineMethodCallIndentation
-      count_anim = tick_anim
-        .parallel_add(fade_in.call(@clock))
-        .parallel_add(fade_in.call(@clock_face, opacity_end: 120))
-        .parallel_add(fade_in.call(@hand))
-        .play_before(ya.rotation(hand_duration, @hand, 0, 360))
-        .play_before(fade_out.call(@hand))
-        .parallel_add(ya.send_command_to(@counter, :opacity=, 255))
-      # rubocop:enable Layout/MultilineMethodCallIndentation
-
-      count_anim.parallel_add(ya.se_play(ball_se_filename)) if @countdown == 0
-      count_anim.play_before(ya.wait(0.4))
-                .play_before(fade_out.call(@counter))
-                .parallel_add(fade_out.call(@clock_face))
-                .parallel_add(fade_out.call(@clock))
-
-      return anim
-    end
-
-    def dispose
-      @sprite_stack.dispose
+      return ya.player(
+        *setup_animations,
+        old_count_animation,
+        new_count_animation
+      )
     end
 
     private
 
+    # Creates all the sprites needed for the animation
+    def create_sprites
+      @graduations = create_sprite(graduation_filename, graduation_position)
+      @minute_hand = create_sprite(minute_hand_filename, hand_position)
+      @hour_hand   = create_sprite(hour_hand_filename, hand_position)
+      @number      = create_sprite(number_filename, number_position, *number_dimensions, type: SpriteSheet)
+    end
+
+    # @return [Array<Yuki::Animation::AnimationMixin>]
+    def setup_animations
+      ya = Yuki::Animation
+      tx = @target_sprite.x + x_offset
+      ty = @target_sprite.y + y_offset
+
+      return [
+        ya.move_discreet(0, self, tx, ty, tx, ty),
+        ya.send_command_to(@number, :sx=, @old_count)
+      ]
+    end
+
+    # Animation played during the old count
+    # @return [Yuki::Animation::AnimationMixin]
+    def old_count_animation
+      ya = Yuki::Animation
+
+      return ya.parallel(
+        ya.player(
+          ya.opacity_change(0.1, self, 0, 255),
+          hand_animation
+        ),
+        idle_animation(@old_count)
+      )
+    end
+
+    # Animation played during the new count
+    # @return [Yuki::Animation::AnimationMixin]
+    def new_count_animation
+      ya = Yuki::Animation
+
+      return ya.parallel(
+        ya.player(
+          number_change_animation(@new_count),
+          clock_hide_animation,
+          ya.wait(number_alone_duration),
+          ya.opacity_change(0.1, @number, 255, 0)
+        ),
+        idle_animation(@new_count)
+      )
+    end
+
+    # Animation based on the count that would run parallel of the main animation
+    # @param count [Integer]
+    # @return [Yuki::Animation::AnimationMixin]
+    def idle_animation(count)
+      ya = Yuki::Animation
+      return ya.send_command_to(@number, :sy=, 1) if death?(count)
+      return ya.wait(0) unless peril?(count)
+
+      return ya.timed_loop_animation(
+        0.2, [
+          ya.send_command_to(@number, :sy=, 1),
+          ya.wait(0.1),
+          ya.send_command_to(@number, :sy=, 0)
+        ]
+      )
+    end
+
+    # Animation for the clock hands
+    # @return [Yuki::Animation::AnimationMixin]
+    def hand_animation
+      ya = Yuki::Animation
+
+      minute_angle = ->(count) { -count.to_f * 360.0 / max_count.to_f }
+      min0 = minute_angle.call(@old_count)
+      min1 = minute_angle.call(@new_count)
+      hr0 = min0 / 12.0
+      hr1 = min1 / 12.0
+
+      return ya.parallel(
+        ya.rotation(hand_duration, @minute_hand, min0, min1),
+        ya.rotation(hand_duration, @hour_hand, hr0, hr1),
+        ya.se_play(hand_se_filename)
+      )
+    end
+
+    # Animation for the number change
+    # @return [Yuki::Animation::AnimationMixin]
+    def number_change_animation(count)
+      ya = Yuki::Animation
+
+      animations = [ya.send_command_to(@number, :sx=, count)]
+      animations << ya.se_play(death_se_filename) if death?(count)
+      return animations[0] if animations.size == 1
+
+      return ya.parallel(*animations)
+    end
+
+    # @return [Yuki::Animation::AnimationMixin]
+    def clock_hide_animation
+      ya = Yuki::Animation
+
+      return ya.parallel(
+        ya.opacity_change(0.1, @graduations, 255, 0),
+        ya.opacity_change(0.1, @hour_hand, 255, 0),
+        ya.opacity_change(0.1, @minute_hand, 255, 0),
+      )
+    end
+
+    # Is the perish count a low number?
+    # @param count [Integer]
+    # @return [Boolean]
+    def peril?(count)
+      return count <= 1 && !death?(count)
+    end
+
+    # Is the perish count zero?
+    # @param count [Integer]
+    # @return [Boolean]
+    def death?(count)
+      return count <= 0
+    end
+
     # @param filename [String]
+    # @param position [Array<Integer>]
     # @param args [Array] The arguments after the viewport argument of the sprite to create the sprite
     # @param type [Class] Class to use to generate the sprite
     # @return [Sprite]
-    def create_sprite(filename, *args, type: Sprite)
-      sprite = @sprite_stack.add_sprite(0, -32, filename, *args, type: type)
-      sprite.opacity = 0
+    def create_sprite(filename, position, *args, type: Sprite)
+      sprite = add_sprite(*position, filename, *args, type: type)
       sprite.set_origin(sprite.width / 2, sprite.height / 2)
       apply_3d_battle_settings(sprite)
       return sprite
     end
 
-    # Apply the 3D settings to the sprite if the 3D camera is enabled
     # @param sprite [Sprite, Spritesheet]
     def apply_3d_battle_settings(sprite)
       return unless Battle::BATTLE_CAMERA_3D
@@ -81,32 +173,22 @@ module ZVBattleMsg
       sprite.shader.set_float_uniform('z', @target_sprite.shader_z_position)
     end
 
-    # x offset for the animation
-    # @return [Integer]
-    def x_offset
-      return 0
-    end
+    def x_offset              = 0
+    def y_offset              = -48
+    def graduation_position   = [1, 1]
+    def hand_position         = [0, 0]
+    def hand_duration         = 0.5
+    def max_count             = 4
+    def max_graduations       = 12
+    def number_position       = [0, 0]
+    def number_dimensions     = [max_count + 1, 2]
+    def number_alone_duration = 0.4
 
-    # y offset for the animation
-    # @return [Integer]
-    def y_offset
-      return 0
-    end
-
-    # Duration of the rotation of the clock hand
-    # @return [Float] In seconds
-    def hand_duration
-      return 0.5
-    end
-
-    def clock_filename      = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock')
-    def clock_face_filename = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock-perish-face')
-    def hand_filename       = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock-hand')
-    def counter_filename    = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock-countdown')
-
-    def clock_se_filename = File.join(ROOT_DIR_NAME, DIR_NAME, 'clock-ticking-single')
-    def ball_se_filename  = File.join(ROOT_DIR_NAME, DIR_NAME, 'bell-tolling-single')
-
-    def counter_dimensions = [10, 1]
+    def graduation_filename  = Configs.zv_battle_msg.filepath('perish-graduation')
+    def hour_hand_filename   = Configs.zv_battle_msg.filepath('perish-hour-hand')
+    def minute_hand_filename = Configs.zv_battle_msg.filepath('perish-minute-hand')
+    def number_filename      = Configs.zv_battle_msg.filepath('perish-numbers')
+    def hand_se_filename     = Configs.zv_battle_msg.filepath('perish-countdown')
+    def death_se_filename    = Configs.zv_battle_msg.filepath('perish-death')
   end
 end

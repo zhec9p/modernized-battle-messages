@@ -7,6 +7,6 @@ deps: []
 psdk_compatibility_script: psdk.rb
 retry_psdk_compatibility_after_plugin_load: false
 added_files:
+- Data/configs/plugins/zv_battle_msg_config.json
 - graphics/animations/zv-battle-messages/**/*.png
 - audio/se/zv-battle-messages/**/*.ogg
-- Data/configs/plugins/zv_battle_msg_config.json

@@ -1,17 +1,10 @@
 module ZVBattleMsg
-  # Base class for creating an animation that displays a short popup message on a battler.
-  # Tested with 96px x 17px popup message images on 96px x 96px battler sprites in 2D battle mode.
-  class PopupMessage
-    # Subdirectory in audio/zv-battle-messages or animation/zv-battle-messages holding popup messages' assets
-    DIR_NAME = 'popup-messages'
-
+  # Base class for creating an animation that displays a short popup message on a battler
+  class PopupMessage < UI::SpriteStack
     # Offsets for most popup messages relative to a battler's sprite.
     #   OFFSETS[0] => Player battler
     #   OFFSETS[1] => Enemey battler
     OFFSETS = [[0, -42], [0, -42]]
-
-    TEXT_DIMENSIONS = [96, 8] # Dimensions of the popup's text surface. Unused if text_content returns nil
-    TEXT_ALIGNMENT = 1        # Center alignment for text. Unused if text_content returns nil
 
     # @param viewport [Viewport]
     # @param scene [Battle::Scene]
@@ -20,45 +13,35 @@ module ZVBattleMsg
       @scene = scene
       @target_sprite = target_sprite
 
-      @sprite_stack = UI::SpriteStack.new(viewport, default_cache: :animation)
+      super(viewport, default_cache: :animation)
       create_sprite
       create_text
-      @sprite_stack.z = target_sprite.z
-      @sprite_stack.opacity = 0
+      self.z = target_sprite.z
+      self.opacity = 0
     end
 
-    # @return [Yuki::Animation::TimedAnimation]
-    # @note This animation doesn't dispose
+    # @return [Yuki::Animation::AnimationMixin]
     def create_animation
       raise 'This method should be implemented in the subclass'
     end
 
-    def dispose
-      @sprite_stack.dispose
-    end
-
     private
 
-    # Sprite for the popup message
     # @return [Sprite]
     def create_sprite
       filename = ZVBattleMsg.translate_animation_filename(popup_filename)
-      sprite = @sprite_stack.add_sprite(0, 0, filename)
+      sprite = add_sprite(0, 0, filename)
       sprite.set_origin(sprite.width / 2, sprite.height)
       return sprite
     end
 
-    # Text for the popup message
     # @return [Text]
     def create_text
-      content = text_content
-      return unless content
+      return unless respond_to?(:text_content, true)
 
-      text = @sprite_stack.with_font(20) do
-        @sprite_stack.add_text(*text_position, *TEXT_DIMENSIONS, content, TEXT_ALIGNMENT, color: text_color_id)
+      return with_font(font_id) do
+        add_text(*text_position, *text_dimensions, text_content, text_alignment, color: color_id)
       end
-
-      return text
     end
 
     # Filename of the sprite to use in the popup message
@@ -67,7 +50,6 @@ module ZVBattleMsg
       raise 'This method must be implemented in the subclass'
     end
 
-    # X offset for the animation
     # @return [Integer]
     def x_offset
       offset = OFFSETS[@target_sprite.bank][0]
@@ -75,7 +57,6 @@ module ZVBattleMsg
       return offset
     end
 
-    # Y offset for the animation
     # @return [Integer]
     def y_offset
       offset = OFFSETS[@target_sprite.bank][1]
@@ -83,45 +64,51 @@ module ZVBattleMsg
       return offset
     end
 
-    # Message to display on the popup
-    # @return [String, nil]
-    # @note All text_* methods after this one are unused if this one returns nil
-    def text_content = nil
-
-    # Position of the text relative to the popup's sprite stack
     # @return [Array<Integer>]
+    # @note Unused if the text_content method isn't implemented
     def text_position
-      raise "This method should be implemented in the subclass if `text_content` doesn't return nil"
+      raise 'This method must be implemented in the subclass if `text_content` is implemented'
     end
 
-    # Text color ID based on Fonts
-    # @return [Integer, nil]
-    def text_color_id = 9
+    # @return [Array<Integer>]
+    # @note Unused if the text_content method isn't implemented
+    def text_dimensions = [96, 8]
+
+    # @return [Integer]
+    # @note Unused if the text_content method isn't implemented
+    def text_alignment = 1
+
+    # @return [Integer]
+    # @note Unused if the text_content method isn't implemented
+    def color_id = 9
+
+    # @return [Integer]
+    # @note Unused if the text_content method isn't implemented
+    def font_id = 20
   end
 
   # Basic popup message animation creation
   module PopupMessageBasicAnimation
-    # @return [Yuki::Animation::TimedAnimation]
+    # @return [Yuki::Animation::AnimationMixin]
     # @note This animation doesn't dispose
     def create_animation
       ya = Yuki::Animation
-      appear_anim = ya.opacity_change(0.1, @sprite_stack, 0, 255)
-      appear_anim.play_before(ya.wait(main_duration))
-                 .play_before(ya.opacity_change(0.1, @sprite_stack, 255, 0))
+      tx = @target_sprite.x + x_offset
+      ty = @target_sprite.y + y_offset
 
-      x = @target_sprite.x + x_offset
-      y = @target_sprite.y + y_offset
-      anim = ya.move_discreet(main_duration + 0.1, @sprite_stack, x, y, x, y - 20)
-      anim.parallel_add(appear_anim)
-      return anim
+      return ya.parallel(
+        ya.move_discreet(main_duration + 0.1, self, tx, ty, tx, ty + y_displacement),
+        ya.player(
+          ya.opacity_change(0.1, self, 0, 255),
+          ya.wait(main_duration),
+          ya.opacity_change(0.1, self, 255, 0)
+        )
+      )
     end
 
     private
 
-    # Duration of the main part of the animation
-    # @return [Float]
-    def main_duration
-      return 0.7
-    end
+    def main_duration = 0.7
+    def y_displacement = -20
   end
 end

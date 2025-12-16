@@ -10,26 +10,25 @@ module ZVBattleMsg
     # @param hp [Integer]
     # @param effectiveness [Float, nil]
     # @param critical [Boolean, nil]
-    # @return [Yuki::Animation::TimedAnimation]
+    # @return [Yuki::Animation::AnimationMixin]
     def create_animation(target, hp, effectiveness:, critical:)
       ya = Yuki::Animation
-      full_anim = ya.wait(0)
       popups = create_popups(target, hp, effectiveness: effectiveness, critical: critical)
 
-      popups.each_with_index do |pu, index|
-        anim = ya.wait(time_between_popups * index)
-        anim.play_before(pu.create_animation)
-            .play_before(ya.send_command_to(pu, :dispose))
-
-        full_anim.parallel_add(anim)
+      anims = popups.map.with_index do |pu, index|
+        next ya.player(
+          ya.wait(time_between_popups * index),
+          pu.create_animation,
+          ya.dispose_sprite(pu)
+        )
       end
 
-      return full_anim
+      anims << ya.wait(0) if anims.empty?
+      return ya.parallel(*anims)
     end
 
     private
 
-    # Create all relevant popup messages for the hit
     # @param target [PFM::PokemonBattler]
     # @param hp [Integer]
     # @param effectiveness [Float, nil]
@@ -45,12 +44,11 @@ module ZVBattleMsg
       return popups
     end
 
-    # Create a popup message about the effectiveness of a hit
     # @param target_sprite [BattleUI::PokemonSprite]
     # @poram effectiveness [Float, nil]
     # @return [ZVBattleMsg::PopupMessage, nil]
     def hit_effectiveness_popup(target_sprite, effectiveness)
-      return unless Configs.zv_battle_msg.replace_effectiveness && effectiveness
+      return unless Configs.zv_battle_msg.replace_effectiveness? && effectiveness
 
       viewport = @scene.visual.viewport
       return SuperEffectivePopup.new(viewport, @scene, target_sprite) if effectiveness > 1
@@ -59,12 +57,11 @@ module ZVBattleMsg
       return nil
     end
 
-    # Create a popup message about whether the hit is critical
     # @param target_sprite [BattleUI::PokemonSprite]
     # @poram critical [Boolean, nil]
     # @return [ZVBattleMsg::PopupMessage, nil]
     def critical_hit_popup(target_sprite, critical)
-      return unless Configs.zv_battle_msg.replace_critical_hit && critical
+      return unless Configs.zv_battle_msg.replace_critical_hit? && critical
 
       viewport = @scene.visual.viewport
       return CriticalHitPopup.new(viewport, @scene, target_sprite)
