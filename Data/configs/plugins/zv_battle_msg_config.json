@@ -1,6 +1,6 @@
 {
   "csv_id": 93208,
-  "dir_name": "zv-battle-messages",
+  "prefix": "zv-battle-messages",
   "replace_effectiveness": true,
   "replace_critical_hit": true,
   "replace_unaffected": true,

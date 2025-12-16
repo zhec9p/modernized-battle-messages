@@ -184,11 +184,11 @@ module ZVBattleMsg
     def number_dimensions     = [max_count + 1, 2]
     def number_alone_duration = 0.4
 
-    def graduation_filename  = Configs.zv_battle_msg.filepath('perish-graduation')
-    def hour_hand_filename   = Configs.zv_battle_msg.filepath('perish-hour-hand')
-    def minute_hand_filename = Configs.zv_battle_msg.filepath('perish-minute-hand')
-    def number_filename      = Configs.zv_battle_msg.filepath('perish-numbers')
-    def hand_se_filename     = Configs.zv_battle_msg.filepath('perish-countdown')
-    def death_se_filename    = Configs.zv_battle_msg.filepath('perish-death')
+    def graduation_filename  = Configs.zv_battle_msg.animation_path('perish-graduation')
+    def hour_hand_filename   = Configs.zv_battle_msg.animation_path('perish-hour-hand')
+    def minute_hand_filename = Configs.zv_battle_msg.animation_path('perish-minute-hand')
+    def number_filename      = Configs.zv_battle_msg.animation_path('perish-numbers')
+    def hand_se_filename     = Configs.zv_battle_msg.se_path('perish-countdown')
+    def death_se_filename    = Configs.zv_battle_msg.se_path('perish-death')
   end
 end
