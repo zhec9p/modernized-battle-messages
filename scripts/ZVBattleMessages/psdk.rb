@@ -40,7 +40,6 @@ proc do
       ZVBattleMsg, %i[
         home_language
         translate_animation_filename
-        ZVBattleMsg.file_join
       ]
     )
   end
