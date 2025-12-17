@@ -1,4 +1,6 @@
 # Modernized Battle Messages for PSDK
+> [!WARNING]
+> If your PSDK version is 26.50 or newer, and the version of this plugin you're using is v0.4.0 or older, then you must upgrade your plugin to the latest version. Please uninstall your older version of the plugin before installing the latest.
 
 ## Table of Contents
 - [Overview](#overview)
@@ -8,29 +10,30 @@
 - [Credits](#credits)
 
 ## Overview
-Do you find pressing through "It's super effective!" and other messages of its ilk to be tedious? This plugin replaces some of them with succinct animations to make battles feel snappier and less of a button masher.
+Do you find pressing through "It's super effective!" and other messages like it to be tedious? This PSDK plugin replaces some of them with succinct animations to make battles feel snappier and less of a button masher.
 
 ## Installation
 To install:
 1. Download `ZVBattleMessages.psdkplug` and `193208.csv` from the [newest release](https://github.com/zhec9p/modernized-battle-messages/releases/latest).
-2. Place the downloaded .psdkplug file in the `scripts` subdirectory of your project's root folder.
-3. Open the `cmd.bat` file located in your project's root folder. This will bring up a command prompt.
-4. In the command prompt, type `psdk --util=plugin load` and press Enter.
-5. Place the downloaded .csv file in the `Data/Text/Dialogs` folder path from your project's root folder.
+2. Place the downloaded .psdkplug file in the `scripts` folder in your project.
+3. Open the `cmd.bat` file in your project. This will bring up a command prompt.
+4. Enter `psdk --util=plugin load` in the command prompt.
+5. Place the downloaded .csv file in the `Data/Text/Dialogs` folder in your project.
 
 > [!NOTE]
 > If you're already using the `193208.csv` filename for a different file, then you can rename this plugin's CSV file to a different `1NNNNN.csv` file. Change the number in the `csv_id` field in this plugin's JSON config file to the `NNNNN` number you picked.
 
 To uninstall:
-1. Delete `ZVBattleMessages.psdkplug` from the `scripts` subdirectory of your project's root folder
-2. Open the `cmd.bat` file located in your project's root folder. Enter in `psdk --util=plugin load`. Enter "Y" when asked whether to remove the files added by the plugin.
-3. Delete `193208.csv` or whatever you named that CSV file from `YOUR_PROJECT_ROOT/Data/Text/Dialogs`.
+1. Delete `ZVBattleMessages.psdkplug` from the `scripts` folder in your project.
+2. Open the `cmd.bat` file in your project. This will bring up a command prompt.
+3. Enter `psdk --util=plugin load` in the command prompt. Enter "Y" when asked whether to remove the files added by the plugin.
+3. Delete `193208.csv` or whatever you named that CSV file from the `Data/Text/Dialogs` folder in your project.
 
 ## Dependencies
 - PSDK 26.50 or newer
 
 ## Settings
-The following settings are available in the `Data/configs/plugins/zv_battle_msg_config.json` file.
+The following settings are available in the `Data/configs/plugins/zv_battle_msg_config.json` file in your project.
 
 ```json
 {
@@ -47,14 +50,14 @@ The following settings are available in the `Data/configs/plugins/zv_battle_msg_
 
 | Key | Accepted Values | Default Value | Description |
 | -- | -- | -- | -- |
-| **`csv_id`** | 0 ≤ n ≤ 99999 | 93208 | ID of this plugin's CSV file. |
-| **`prefix`** | String | "zv-battle-messages" | Subfolder name for graphical animation assets. For example, if `prefix` is set to `"zv-battle-messages"`, then the graphics assets must be in `graphics/animations/zv-battle-messages/`.<br/><br/> Filename prefix for audio SE files, followed by a `-` character. For example, if `prefix` is set to `"zv-battle-messages"`, then the audio SE assets must be named `zv-battle-messages-*.ogg` in `audio/se/` (where `*` is the rest of the filename). |
-| **`replace_effectiveness`** | `true`, `false` | `true` | Replaces the message displayed for super-effective and not-very-effective hits with a corresponding popup animation. |
-| **`replace_critical_hit`** | `true`, `false` | `true` | Replaces the message displayed for a critical hit with a popup animation. |
-| **`replace_unaffected`** | `true`, `false` | `true` | Replaces the message displayed when a move doesn't affect a battler with a popup and battler sprite animation. |
-| **`replace_stat_change`** | `true`, `false` | `true` | Replaces the message displayed when a battler's stat stage changes with a popup animation. This also speeds up the vanilla stat change animation, which the popup will overlap with. |
-| **`replace_miss`** | `true`, `false` | `true` | Replaces the message displayed when an attack misses with a popup and battler sprite animation. |
-| **`replace_perish`** | `true`, `false` | `true` | Replaces the message displayed for a battler's perish count with a custom animation. |
+| **`csv_id`** | Integer $⊆$ [0, 99999] | 93208 | ID of this plugin's CSV file. The CSV is required for stat change popups.|
+| **`prefix`** | String | "zv-battle-messages" | Subfolder name for this plugin's animation assets. For example, if you set `prefix` to `"zv-battle-messages"`, then the plugin will pull graphics files from the `graphics/animations/zv-battle-messages/` folder.<br/><br/> Filename prefix for this plugin's SE assets, followed by a `-` character. For example, if you set `prefix` to `"zv-battle-messages"`, then the plugin will pull SE files that begin with `zv-battle-messages-` from the `audio/se/` folder.<br/><br/>The purpose of this setting is to tell the plugin to use your custom asset files. This prevents the need to overwrite the plugin's provided assets with yours and risking deletion of your custom assets when reinstalling or uninstalling this plugin.
+| **`replace_effectiveness`** | Boolean | `true` | Replaces the message displayed for super-effective and not-very-effective hits with a corresponding popup animation. |
+| **`replace_critical_hit`** | Boolean | `true` | Replaces the message displayed for a critical hit with a popup animation. |
+| **`replace_unaffected`** | Boolean | `true` | Replaces the message displayed when a move doesn't affect a battler with a popup and battler sprite animation. |
+| **`replace_stat_change`** | Boolean | `true` | Replaces the message displayed when a battler's stat stage changes with a popup animation. This also speeds up the vanilla stat change animation, which the popup will overlap with. |
+| **`replace_miss`** | Boolean | `true` | Replaces the message displayed when an attack misses with a popup and battler sprite animation. |
+| **`replace_perish`** | Boolean | `true` | Replaces the message displayed for a battler's perish count with a custom animation. |
 
 ## Credits
 #### Plugin Creator
