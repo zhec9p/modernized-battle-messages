@@ -1,10 +1,7 @@
 module ZVBattleMsg
   # Base class for creating an animation that displays a short popup message on a battler
   class PopupMessage < UI::SpriteStack
-    # Offsets for most popup messages relative to a battler's sprite.
-    #   OFFSETS[0] => Player battler
-    #   OFFSETS[1] => Enemey battler
-    OFFSETS = [[0, -42], [0, -42]]
+    include Offsets3D
 
     # @param viewport [Viewport]
     # @param scene [Battle::Scene]
@@ -50,19 +47,12 @@ module ZVBattleMsg
       raise 'This method must be implemented in the subclass'
     end
 
-    # @return [Integer]
-    def x_offset
-      offset = OFFSETS[@target_sprite.bank][0]
-      offset += Graphics.width / 2 if Battle::BATTLE_CAMERA_3D
-      return offset
-    end
-
-    # @return [Integer]
-    def y_offset
-      offset = OFFSETS[@target_sprite.bank][1]
-      offset += Graphics.height / 2 if Battle::BATTLE_CAMERA_3D
-      return offset
-    end
+    # Offsets for most popup messages relative to a battler's sprite
+    # @return [Array<Array<Integer>>]
+    def position_offsets = [
+      [0, -42], # Player battler
+      [0, -42]  # Enemy battler
+    ]
 
     # @return [Array<Integer>]
     # @note Unused if the text_content method isn't implemented

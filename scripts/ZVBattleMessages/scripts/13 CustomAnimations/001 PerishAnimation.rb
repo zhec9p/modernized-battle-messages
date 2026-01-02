@@ -134,7 +134,7 @@ module ZVBattleMsg
       return ya.parallel(
         ya.opacity_change(0.1, @graduations, 255, 0),
         ya.opacity_change(0.1, @hour_hand, 255, 0),
-        ya.opacity_change(0.1, @minute_hand, 255, 0),
+        ya.opacity_change(0.1, @minute_hand, 255, 0)
       )
     end
 
