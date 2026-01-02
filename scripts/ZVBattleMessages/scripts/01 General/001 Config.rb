@@ -148,7 +148,7 @@ module Configs
       def apply_silence_settings(message, csv_id, text_id)
         return unless silence_message?(csv_id, text_id)
 
-        message.singleton_class.prepend(::ZVBattleMsg::SilentTextMessage)
+        message.singleton_class.prepend(::ZVBattleMsg::SilentSceneMessage)
       end
 
       # Relative path to a graphics file for this plugin starting from graphics/animations/

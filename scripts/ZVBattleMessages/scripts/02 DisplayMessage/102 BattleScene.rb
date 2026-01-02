@@ -2,7 +2,7 @@ module Battle
   class Scene
     module ZVBattleMsgDisplayMessage
       def display_message(message, *_args, **_kwargs, &_block)
-        return super unless message.is_a?(ZVBattleMsg::SilentTextMessage)
+        return super unless message.is_a?(ZVBattleMsg::SilentSceneMessage)
 
         zv_log_battle_message(message)
         return nil

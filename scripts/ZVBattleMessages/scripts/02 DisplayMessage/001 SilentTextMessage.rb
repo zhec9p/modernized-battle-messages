@@ -1,3 +1,3 @@
 module ZVBattleMsg
-  module SilentTextMessage; end
+  module SilentSceneMessage; end
 end
