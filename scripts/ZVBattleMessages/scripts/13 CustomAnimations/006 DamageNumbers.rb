@@ -15,7 +15,6 @@ module ZVBattleMsg
       @quantity = quantity
       @target_sprite = @scene.visual.battler_sprite(@target.bank, @target.position)
 
-      move_to_target
       create_text
       self.z = @target_sprite.z
       self.opacity = 0
@@ -35,12 +34,6 @@ module ZVBattleMsg
 
     private
 
-    # Move sprite stack to the target sprite's position
-    def move_to_target
-      self.x = @target_sprite.x + x_offset
-      self.y = @target_sprite.y + y_offset
-    end
-
     # Draw text for the damage value
     def create_text
       value = displayable_value
@@ -48,7 +41,9 @@ module ZVBattleMsg
 
       @digits = value.each_char.map do |digit|
         dx += extra_space_before_unit if digit == unit
-        text = with_font(font_id) { add_text(dx, 0, 0, nil, digit, color: color_id) }
+        text = with_font(font_id) do
+          add_text(dx, 0, _width = 0, _height = nil, digit, _align = 0, outline_size, color: color_id)
+        end
         dx += text.real_width + space_after_digit
         next text
       end
@@ -72,8 +67,8 @@ module ZVBattleMsg
     # @return [Yuki::Animation::AnimationMixin]
     def single_digit_animation(digit, index)
       ya = Yuki::Animation
-      dx  = digit.x
-      dy1 = digit.y
+      dx  = digit.x + @target_sprite.x + x_offset
+      dy1 = digit.y + @target_sprite.y + y_offset
       dy2 = dy1 + digit_y_displacement
 
       return ya.player(
@@ -107,7 +102,9 @@ module ZVBattleMsg
     # @return [Integer]
     def calculate_left_digit_x_offset(value)
       tmp_stack = UI::SpriteStack.new(viewport)
-      tmp_text = tmp_stack.with_font(font_id) { tmp_stack.add_text(0, 0, 0, nil, value) }
+      tmp_text = tmp_stack.with_font(font_id) do
+        tmp_stack.add_text(0, 0, _width = 0, _height = nil, value, _align = 0, outline_size)
+      end
       return -tmp_text.real_width / 2
     ensure
       tmp_stack&.dispose
@@ -132,14 +129,15 @@ module ZVBattleMsg
     # Offsets relative to a battler's sprite
     # @return [Array<Array<Integer>>]
     def position_offsets = [
-      [0, -2], # Player battler
+      [0, -35], # Player battler
       [0, -2] # Enemy battler
     ]
 
     def digit_y_displacement = -5
     def move_duration = 0.3
     def wait_duration = 0.65
-    def space_after_digit = 2
+    def outline_size = 2
+    def space_after_digit = 0
     def extra_space_before_unit = 1
   end
 

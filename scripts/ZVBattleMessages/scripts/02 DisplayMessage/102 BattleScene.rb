@@ -4,7 +4,7 @@ module Battle
       def display_message(message, *_args, **_kwargs, &_block)
         return super unless message.is_a?(ZVBattleMsg::SilentSceneMessage)
 
-        zv_log_battle_message(message)
+        zv_log_battle_message(message) unless zv_battle_log_busy
         return nil
       end
     end
