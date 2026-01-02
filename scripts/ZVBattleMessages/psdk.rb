@@ -31,8 +31,12 @@ proc do
         MissPopup
         StatChangePopup
         PerishAnimation
+        DamageNumbers
+        HealNumbers
         HitPopupAnimation
         BattleMsgTemp
+        PopupMessageBasicAnimation
+        Offsets3D
       ]
     )
 
@@ -49,6 +53,8 @@ proc do
       zv_show_unaffected_animation
       zv_show_miss_animation
       zv_show_perish_animation
+      zv_create_hit_popup_animation
+      zv_create_damage_numbers_animation
     ]
   )
 end.call

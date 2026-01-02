@@ -1,10 +1,36 @@
 {
   "csv_id": 93208,
   "prefix": "zv-battle-messages",
+
   "replace_effectiveness": true,
   "replace_critical_hit": true,
   "replace_unaffected": true,
   "replace_miss": true,
   "replace_stat_change": true,
-  "replace_perish": true
+  "replace_perish": true,
+
+  "damage_numbers": {
+    "enable": true,
+    "measurement": "percent",
+    "unit_text": "",
+    "font_id": 0,
+    "hurt_color": 9,
+    "heal_color": 13
+  },
+
+  "silence_messages": {
+    "enable": true,
+    "messages": [
+      {
+        "csv_id": 19,
+        "text_id": 243,
+        "comment": "poison/toxic status end of turn"
+      },
+      {
+        "csv_id": 19,
+        "text_id": 261,
+        "comment": "burn status end of turn"
+      }
+    ]
+  }
 }
