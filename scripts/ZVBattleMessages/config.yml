@@ -2,7 +2,7 @@
 name: ZVBattleMessages
 authors:
 - zhec
-version: 0.5.0.0
+version: 0.5.0.1
 deps: []
 psdk_compatibility_script: psdk.rb
 retry_psdk_compatibility_after_plugin_load: false

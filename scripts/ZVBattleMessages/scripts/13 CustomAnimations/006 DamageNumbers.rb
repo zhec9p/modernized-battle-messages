@@ -15,6 +15,7 @@ module ZVBattleMsg
       @quantity = quantity
       @target_sprite = @scene.visual.battler_sprite(@target.bank, @target.position)
 
+      move_to_target
       create_text
       self.z = @target_sprite.z
       self.opacity = 0
@@ -33,6 +34,12 @@ module ZVBattleMsg
     end
 
     private
+
+    # Move the sprite stack to the target sprite's location
+    def move_to_target
+      self.x = @target_sprite.x + x_offset
+      self.y = @target_sprite.y + y_offset
+    end
 
     # Draw text for the damage value
     def create_text
@@ -66,9 +73,9 @@ module ZVBattleMsg
     # @param index [Integer]
     # @return [Yuki::Animation::AnimationMixin]
     def single_digit_animation(digit, index)
-      ya = Yuki::Animation
-      dx  = digit.x + @target_sprite.x + x_offset
-      dy1 = digit.y + @target_sprite.y + y_offset
+      ya  = Yuki::Animation
+      dx  = digit.x
+      dy1 = digit.y
       dy2 = dy1 + digit_y_displacement
 
       return ya.player(
@@ -102,6 +109,8 @@ module ZVBattleMsg
     # @return [Integer]
     def calculate_left_digit_x_offset(value)
       tmp_stack = UI::SpriteStack.new(viewport)
+      tmp_stack.visible = false
+      tmp_stack.z = -1
       tmp_text = tmp_stack.with_font(font_id) do
         tmp_stack.add_text(0, 0, _width = 0, _height = nil, value, _align = 0, outline_size)
       end
