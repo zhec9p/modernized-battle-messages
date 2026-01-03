@@ -56,6 +56,7 @@ The following settings are available in the `Data/configs/plugins/zv_battle_msg_
     "measurement": "percent",
     "unit_text": "",
     "font_id": 0,
+    "outline_size": 1,
     "hurt_color": 9,
     "heal_color": 13
   },
@@ -72,6 +73,11 @@ The following settings are available in the `Data/configs/plugins/zv_battle_msg_
         "csv_id": 19,
         "text_id": 261,
         "note": "burn status end of turn"
+      },
+      {
+        "csv_id": 19,
+        "text_id": 905,
+        "note": "standard energy drain"
       }
     ]
   }
@@ -97,9 +103,10 @@ The **`damage_numbers`** field in the JSON config file expects an object with th
 | Key | Expected Value | Default Value | Description |
 | -- | -- | -- | -- |
 | **`enable`** | Boolean | `true` | Whether to enable this feature. |
-| **`measurement`** | "percent"<br/>"points" | "percent" | Measurement to use for health lost/restored displayed.<br/><br/>`"percent"` displays them as percentages rounded to the nearest whole number, e.g., 25%.<br/><br/>`"points"` displays them as an exact HP quantity, e.g. 50 HP. |
+| **`measurement`** | "percent",<br/>"points" | "percent" | Measurement to use for health lost/restored displayed.<br/><br/>`"percent"` displays them as percentages rounded to the nearest whole number, e.g., 25%.<br/><br/>`"points"` displays them as an exact HP quantity, e.g. 50 HP. |
 | **`unit_text`** | String | "" | Text to use for the unit. Use an empty string for a unitless number, e.g., 25 instead of 25% or 50 instead of 50 HP in the above example. |
 | **`font_id`** | Integer | 0 | Font ID based on your project's Studio settings |
+| **`outline_size`** | Integer,<br/>null | 1 | Size of the text outline. |
 | **`hurt_color`** | Integer | 9 | Color ID for health lost based on the `graphics/windowskins/_colors.png` file in your project. |
 | **`heal_color`** | Integer | 13 | Color ID for health restored based on `graphics/windowskins/_colors.png` file in your project. |
 

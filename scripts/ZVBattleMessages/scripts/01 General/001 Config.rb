@@ -23,6 +23,10 @@ module Configs
         # @return [Integer]
         attr_reader :font_id
 
+        # Size of the text outline
+        # @return [Integer]
+        attr_reader :outline_size
+
         # Color ID of the damage popup numbers
         # @return [Integer]
         attr_reader :hurt_color
@@ -33,12 +37,13 @@ module Configs
 
         # @param settings [Hash]
         def initialize(settings)
-          @enable      = settings[:enable]
-          @measurement = settings[:measurement].to_sym
-          @unit_text   = settings[:unit_text]
-          @font_id     = settings[:font_id]
-          @hurt_color  = settings[:hurt_color]
-          @heal_color  = settings[:heal_color]
+          @enable       = settings[:enable]
+          @measurement  = settings[:measurement].to_sym
+          @unit_text    = settings[:unit_text]
+          @font_id      = settings[:font_id]
+          @outline_size = settings[:outline_size]
+          @hurt_color   = settings[:hurt_color]
+          @heal_color   = settings[:heal_color]
 
           raise 'Invalid measurement choice' unless MEASUREMENTS.include?(@measurement)
         end
@@ -181,6 +186,7 @@ module Configs
           measurement: :percent,
           unit_text: '',
           font_id: 0,
+          outline_size: 1,
           hurt_color: 9,
           heal_color: 13
         }
@@ -197,6 +203,11 @@ module Configs
               csv_id: 19,
               text_id: 261,
               comment: 'burn status end of turn'
+            },
+            {
+              csv_id: 19,
+              text_id: 905,
+              note: 'standard energy drain'
             }
           ]
         }

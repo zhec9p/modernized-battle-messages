@@ -136,7 +136,7 @@ module ZVBattleMsg
     def digit_y_displacement = -5
     def move_duration = 0.3
     def wait_duration = 0.65
-    def outline_size = 2
+    def outline_size = Configs.zv_battle_msg.damage_numbers.outline_size
     def space_after_digit = 0
     def extra_space_before_unit = 1
   end
