@@ -117,6 +117,10 @@ module Configs
       # @return [Boolean]
       attr_accessor :replace_perish
 
+      # Replace the messages displayed when a battler uses a move or when the move fails?
+      # @return [Boolean]
+      attr_accessor :replace_move_usage
+
       # Damage popup numbers settings
       # @return [Configs::Project::ZVBattleMsg::DamageNumbers]
       attr_reader :damage_numbers
@@ -174,12 +178,14 @@ module Configs
       def initialize
         self.csv_id                = 93_208
         self.prefix                = 'zv-battle-messages'
+
         self.replace_effectiveness = true
         self.replace_critical_hit  = true
         self.replace_unaffected    = true
         self.replace_miss          = true
         self.replace_stat_change   = true
         self.replace_perish        = true
+        self.replace_move_usage    = true
 
         self.damage_numbers = {
           enable: true,

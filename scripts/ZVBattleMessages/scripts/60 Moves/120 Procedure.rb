@@ -21,6 +21,14 @@ module Battle
 
       private
 
+      def usage_message(user, *_args, **_kwargs)
+        return super unless Configs.zv_battle_msg.replace_move_usage
+
+        @scene.visual.hide_team_info
+        @scene.zv_log_move_usage_message(user, self)
+        @scene.visual.show_move_usage(self)
+      end
+
       def accuracy_immunity_test(user, targets)
         return super unless Configs.zv_battle_msg.replace_unaffected
 
